@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard"
-import Product from "./pages/tables/Product";
-import Requested from "./pages/tables/Requested";
-import User from "./pages/tables/Users";
-import Completedrequest from "./pages/tables/completedRequest";
-import Location from "./pages/tables/location";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import Dashboard from "./pages/Dashboard/Dashboard"
+import Product from "./pages/Product/Product";
+import Requested from "./pages/Requested/Requested";
+import User from "./pages/Users/Users";
+import Completedrequest from "./pages/completedRequest/completedRequest";
+import Location from "./pages/Location/location";
 function App() {
   return (
     <Router>

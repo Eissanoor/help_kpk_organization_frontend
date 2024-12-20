@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/navbar"
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/navbar"
 const Dashboard = () => {
   const navigate = useNavigate(); // Use the navigate hook
 
