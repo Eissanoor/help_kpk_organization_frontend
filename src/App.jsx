@@ -8,6 +8,7 @@ import Requested from "./pages/Requested/Requested";
 import User from "./pages/Users/Users";
 import Completedrequest from "./pages/completedRequest/completedRequest";
 import Location from "./pages/Location/location";
+import CreateNewUser from "./pages/Users/CreateNewUser"
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/completedrequest" element={<Completedrequest />} />
         <Route path="/location" element={<Location />} />
+        <Route path="/create-new-user" element={<CreateNewUser />} />
         <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
       </Routes>
     </Router>
