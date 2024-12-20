@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="flex items-center justify-between bg-gray-50 px-4 py-2 shadow-md">
+    
+    <div className="flex items-center justify-between bg-white px-4 py-4 shadow-md  max-w-7xl   sm:px-6" style={{
+      marginLeft: 'auto'
+    }}>
     {/* Search Bar */}
     <div className="flex-1">
       <input
