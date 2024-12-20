@@ -50,7 +50,7 @@ const Register = () => {
 
       // Simulate successful registration and navigate to Login page
       setTimeout(() => {
-        navigate("/login"); // Navigate to login page
+        navigate("/"); // Navigate to login page
       }, 1000);
     }
   };
@@ -169,7 +169,7 @@ const Register = () => {
               <a
                 href="#"
                 className="text-blue-600 font-semibold hover:underline ml-1"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/")}
               >
                 Login here
               </a>
