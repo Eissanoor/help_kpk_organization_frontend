@@ -1,5 +1,5 @@
 import Sidebar from "../../components/Sidebar";
-
+import AddNewButton from "./AddNewButton";
 const Product = () => {
   return (
     <>
@@ -15,9 +15,7 @@ const Product = () => {
     style={{
       paddingBottom: '20px'
     }}>
-    <button type="button"
-        class="px-5 py-2.5 rounded-lg text-sm tracking-wider font-medium border border-current outline-none bg-blue-700 hover:bg-transparent text-white hover:text-blue-700 transition-all duration-300">Add new</button>
-
+   <AddNewButton />
         </div>
     <div class="overflow-x-auto font-[sans-serif]">
       <table class="min-w-full bg-white">
