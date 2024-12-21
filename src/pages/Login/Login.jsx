@@ -38,14 +38,43 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
+
+    // Check if "Remember Me" is checked
+    if (!formData.rememberMe) {
+      validationErrors.rememberMe = "You must agree to remember me.";
+    }
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
       setErrors({});
       console.log("Form submitted successfully:", formData);
       // Perform login logic (e.g., API call)
+      navigate("/dashboard");
     }
   };
+
+  function validateForm(username, password) {
+    if (!username) {
+        console.log("Username is required.");
+        return false;
+    }
+    if (!password) {
+        console.log("Password is required.");
+        return false;
+    }
+    return true;
+  }
+
+  // Example usage
+  const username = ""; // or some input value
+  const password = ""; // or some input value
+
+  if (validateForm(username, password)) {
+    console.log("Form is valid.");
+  } else {
+    console.log("Form is invalid.");
+  }
 
   return (
     <div className="font-[sans-serif]">
@@ -117,6 +146,9 @@ const Login = () => {
                   <label htmlFor="remember-me" className="ml-3 block text-sm text-gray-800">
                     Remember me
                   </label>
+                  {errors.rememberMe && (
+                    <p className="text-red-500 text-xs mt-1">{errors.rememberMe}</p>
+                  )}
                 </div>
 
                 <div className="text-sm">
@@ -131,7 +163,6 @@ const Login = () => {
                 <button
                   type="submit"
                   className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                  onClick={() => navigate("/dashboard")}
                 >
                   Log in
                 </button>
