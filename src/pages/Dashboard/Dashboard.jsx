@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/navbar"
 const Dashboard = () => {
   const navigate = useNavigate(); // Use the navigate hook
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   // Define card data
   const cardData = [

@@ -1,17 +1,20 @@
 import { useState } from "react";
-import Layout from "../../components/Layout";
 import { useNavigate } from "react-router-dom";
+import { login } from "./loginApi"; // Import the login service
+import Toast from '../../components/Toast'; // Import the Toast component
 
 const Login = () => {
     const navigate = useNavigate(); // React Router navigate function
   // State for input fields
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
     rememberMe: false,
   });
 
   const [errors, setErrors] = useState({});
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -25,8 +28,8 @@ const Login = () => {
   // Validate form fields
   const validate = () => {
     const newErrors = {};
-    if (!formData.username.trim()) {
-      newErrors.username = "Username is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
     }
     if (!formData.password) {
       newErrors.password = "Password is required";
@@ -35,28 +38,36 @@ const Login = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
-
-    // Check if "Remember Me" is checked
-    if (!formData.rememberMe) {
-      validationErrors.rememberMe = "You must agree to remember me.";
-    }
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      setErrors({});
-      console.log("Form submitted successfully:", formData);
-      // Perform login logic (e.g., API call)
-      navigate("/dashboard");
+      try {
+        const response = await login(formData.email, formData.password);
+        if (response.status === 200 && response.success) {
+          const token = response.data.token;
+          localStorage.setItem('authToken', token); // Save token to localStorage
+          console.log("token--", token);
+          
+          console.log("Login successful:", response.message);
+          navigate("/dashboard");
+        } else {
+          throw new Error(response.message);
+        }
+      } catch (error) {
+        console.error("Login error:", error.message);
+        setErrors({ apiError: error.message });
+        setToastMessage(error.message); // Display error in toast
+        setToastVisible(true);
+        setTimeout(() => setToastVisible(false), 3000); // Hide after 3 seconds
+      }
     }
-  };
-
-  function validateForm(username, password) {
-    if (!username) {
-        console.log("Username is required.");
+  }
+  function validateForm(email, password) {
+    if (!email) {
+        console.log("email is required.");
         return false;
     }
     if (!password) {
@@ -67,10 +78,10 @@ const Login = () => {
   }
 
   // Example usage
-  const username = ""; // or some input value
+  const email = ""; // or some input value
   const password = ""; // or some input value
 
-  if (validateForm(username, password)) {
+  if (validateForm(email, password)) {
     console.log("Form is valid.");
   } else {
     console.log("Form is invalid.");
@@ -78,6 +89,9 @@ const Login = () => {
 
   return (
     <div className="font-[sans-serif]">
+      {/* Toast Notification */}
+      <Toast message={toastMessage} visible={toastVisible} />
+
       <div className="min-h-screen flex items-center justify-center py-6 px-4">
         <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
           {/* Login Form */}
@@ -90,23 +104,23 @@ const Login = () => {
                 </p>
               </div>
 
-              {/* Username Field */}
+              {/* email Field */}
               <div>
-                <label className="text-gray-800 text-sm mb-2 block">User name</label>
+                <label className="text-gray-800 text-sm mb-2 block">Email</label>
                 <div className="relative flex items-center">
                   <input
-                    name="username"
+                    name="email"
                     type="text"
                     className={`w-full text-sm text-gray-800 border px-4 py-3 rounded-lg outline-blue-600 ${
-                      errors.username ? "border-red-500" : "border-gray-300"
+                      errors.email ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter user name"
-                    value={formData.username}
+                    value={formData.email}
                     onChange={handleChange}
                     required
                   />
-                  {errors.username && (
-                    <p className="text-red-500 text-xs mt-1 absolute -bottom-5">{errors.username}</p>
+                  {errors.email && (
+                    <p className="text-red-500 text-xs mt-1 absolute -bottom-5">{errors.email}</p>
                   )}
                 </div>
               </div>
