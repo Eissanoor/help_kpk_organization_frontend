@@ -61,7 +61,7 @@ const Product = () => {
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
-        src={`${API_BASE_URL}/${params.value}`} // Adjust the path as needed
+        src={`https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg`} // Adjust the path as needed
         className="w-10 h-10 object-cover"
         alt={params.row.productName} 
         onError={(e) => { e.target.onerror = null; e.target.src = "/default-image.png"; }} // Handle broken images
