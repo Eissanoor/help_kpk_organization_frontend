@@ -7,8 +7,10 @@ import Paper from '@mui/material/Paper';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
+  const navigate = useNavigate(); // Use the navigate hook
   const [products, setProducts] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -45,11 +47,17 @@ const Product = () => {
 
   const handleView = () => {
     console.log('View product:', selectedProduct);
+    navigate("/view-product", { state: { productId: selectedProduct._id } });
     handleClose();
   };
 
   const handleUpdate = () => {
-    console.log('Update product:', selectedProduct);
+    if (selectedProduct) {
+        console.log('Update product:', selectedProduct);
+        navigate("/update-product", { state: { productId: selectedProduct._id } });
+    } else {
+        console.error("No product selected for update.");
+    }
     handleClose();
   };
 
@@ -60,7 +68,7 @@ const Product = () => {
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
-        src={`${API_BASE_URL}/${params.value}`} // Adjust the path as needed
+        src={`https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp`} // Adjust the path as needed
         className="w-10 h-10 object-cover"
         alt={params.row.productName} 
        />
@@ -81,7 +89,8 @@ const Product = () => {
     <>
     <Sidebar/>
     <section className="flex flex-col justify-center max-w-5xl px-4 py-10 mx-auto sm:px-10">
-      <div className="mb-10 ">
+      
+      <div className="mb-10  ">
         <h2 className="mr-5 text-4xl font-bold leading-none md:text-5xl">Products</h2>
         <AddNewButton />
       </div>
