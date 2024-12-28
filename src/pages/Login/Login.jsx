@@ -153,7 +153,7 @@ const Login = () => {
                     id="remember-me"
                     name="rememberMe"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 #183702 focus:ring-blue-500 border-gray-300 rounded"
                     checked={formData.rememberMe}
                     onChange={handleChange}
                   />
@@ -166,7 +166,7 @@ const Login = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="javascript:void(0);" className="text-blue-600 hover:underline font-semibold">
+                  <a href="javascript:void(0);" className="#183702 hover:underline font-semibold">
                     Forgot your password?
                   </a>
                 </div>
@@ -176,7 +176,7 @@ const Login = () => {
               <div className="!mt-8">
                 <button
                   type="submit"
-                  className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                  className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-green-800 hover:bg-green-900 focus:outline-none"
                 >
                   Log in
                 </button>
@@ -186,7 +186,7 @@ const Login = () => {
               <p className="text-sm !mt-8 text-center text-gray-800">
                 Don't have an account?
                 <a  href="#"
-                className="text-blue-600 font-semibold hover:underline ml-1" onClick={() => navigate("/register")}>
+                className="#183702 font-semibold hover:underline ml-1" onClick={() => navigate("/register")}>
                   Register here
                 </a>
               </p>

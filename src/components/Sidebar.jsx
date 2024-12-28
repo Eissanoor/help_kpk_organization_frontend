@@ -12,7 +12,7 @@ const Sidebar = () => {
         <ul className="mt-6">
           <li>
             <a 
-              className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all cursor-pointer"
+              className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
               onClick={() => navigate("/dashboard")}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                 viewBox="0 0 512 512">
@@ -30,7 +30,7 @@ const Sidebar = () => {
           <ul className="mt-3">
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all cursor-pointer"
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/user")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 512 512">
@@ -43,7 +43,7 @@ const Sidebar = () => {
             </li>
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all cursor-pointer"
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/product")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ const Sidebar = () => {
             </li>
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all cursor-pointer"
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/requested")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 510 510">
@@ -83,7 +83,7 @@ const Sidebar = () => {
           <ul className="mt-3">
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all"
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/completedrequest")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 511.877 511.877">
@@ -96,7 +96,7 @@ const Sidebar = () => {
             </li>
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all"
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/location")}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 193.769 193.769">
@@ -118,7 +118,7 @@ const Sidebar = () => {
           <ul className="mt-3">
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all">
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 512 512">
                   <path
@@ -130,7 +130,7 @@ const Sidebar = () => {
             </li>
             <li>
               <a 
-                className="text-black hover:#183702 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all">
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
                   viewBox="0 0 6.35 6.35">
                   <path

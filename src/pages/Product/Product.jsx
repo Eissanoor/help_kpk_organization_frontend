@@ -99,6 +99,7 @@ const Product = () => {
           rows={products}
           columns={columns}
           pageSize={5}
+          checkboxSelection
           getRowId={(row) => row._id}
           sx={{
             '& .MuiDataGrid-columnHeader': {
