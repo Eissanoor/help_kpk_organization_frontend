@@ -57,15 +57,13 @@ const Product = () => {
     console.log('Delete product:', selectedProduct);
     handleClose();
   };
-
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
-        src={`https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg`} // Adjust the path as needed
+        src={`${API_BASE_URL}/${params.value}`} // Adjust the path as needed
         className="w-10 h-10 object-cover"
         alt={params.row.productName} 
-        onError={(e) => { e.target.onerror = null; e.target.src = "/default-image.png"; }} // Handle broken images
-      />
+       />
     )},
     { field: 'productName', headerName: 'Product Name', width: 200 },
     { field: 'productDescription', headerName: 'Product Description', width: 300 },
@@ -117,7 +115,6 @@ const Product = () => {
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
     </section>
-    <img src="http://localhost:5020/uploads/image-1735233464591-773738873.jpg" alt="Product Image" />
    
     </>
   );
