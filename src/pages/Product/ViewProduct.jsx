@@ -7,10 +7,6 @@ const ViewProduct = () => {
   const location = useLocation();
   const { productId } = location.state; // Get product ID from state
   const [product, setProduct] = useState(null);
-  console.log(productId);
-  
-  
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {

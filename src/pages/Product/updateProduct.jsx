@@ -4,11 +4,14 @@ import Sidebar from "../../components/Sidebar";
 import { API_BASE_URL } from '../../config/Config';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const UpdateProduct = () => {
     const { productId } = useParams();
-    console.log(productId);
+    const location = useLocation();
+    const productIdFromState = location.state?.productId;
+
+    const finalProductId = productIdFromState || productId;
     
   const [productName, setProductName] = React.useState('');
   const [productDescription, setProductDescription] = React.useState('');
@@ -17,13 +20,13 @@ const UpdateProduct = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/product/productgetbyid/${productId}`);
+        const response = await fetch(`${API_BASE_URL}/product/productgetbyid/${finalProductId}`);
         const data = await response.json();
-        console.log("-------",data);
-        
+       
         if (response.ok && data.success) {
-          setProductName(data.productName);
-          setProductDescription(data.productDescription);
+          setProductName(data.data.productName);
+          setProductDescription(data.data.productDescription);
+          setImageFile(data.data.image);
         } else {
           toast.error(data.message || 'Failed to fetch product data');
         }
@@ -33,10 +36,10 @@ const UpdateProduct = () => {
       }
     };
 
-    if (productId) {
+    if (finalProductId) {
       fetchProductData();
     }
-  }, [productId]);
+  }, [finalProductId]);
 
   const handleCreateEntity = async () => {
     try {
@@ -47,8 +50,8 @@ const UpdateProduct = () => {
         formData.append('image', imageFile);
       }
 
-      const response = await fetch(`${API_BASE_URL}/product/updateproduct/${productId}`, {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}/product/updateproduct/${finalProductId}`, {
+        method: 'PUT',
         body: formData,
       });
 
@@ -70,8 +73,10 @@ const UpdateProduct = () => {
       <ToastContainer />
       <Sidebar />
       <form className="font-[sans-serif] m-20 max-w-4xl mx-auto" onSubmit={(e) => {
-        e.preventDefault();
-        handleCreateEntity();
+          
+          e.preventDefault();
+          handleCreateEntity();
+          console.log(e.target);
       }}>
         <div className="flex flex-wrap items-center justify-between mb-10">
           <h2 className="mr-5 text-4xl font-bold leading-none md:text-4xl">
@@ -79,6 +84,11 @@ const UpdateProduct = () => {
           </h2>
         </div>
         <div className="grid sm:grid-cols-2 gap-10">
+          {imageFile && (
+            <div className="relative flex items-center sm:col-span-2">
+              <img src={`${API_BASE_URL}/${imageFile}`} alt="Current Product" className="w-32 h-32 object-cover mb-4" />
+            </div>
+          )}
           <div className="relative flex items-center sm:col-span-2">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Image</label>
             <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files[0])}
