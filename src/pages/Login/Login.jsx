@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "./loginApi"; // Import the login service
 import Toast from '../../components/Toast'; // Import the Toast component
-
+import myLogo from "../../assets/logo.png";
 const Login = () => {
     const navigate = useNavigate(); // React Router navigate function
   // State for input fields
@@ -196,8 +196,8 @@ const Login = () => {
           {/* Image */}
           <div className="lg:h-[400px] md:h-[300px] max-md:mt-8">
             <img
-              src="https://readymadeui.com/login-image.webp"
-              className="w-full h-full max-md:w-4/5 mx-auto block object-cover"
+              src={myLogo}
+              className="w-2/4 h-2/3 max-md:w-2/5 mx-auto block object-cover"
               alt="Login Illustration"
             />
           </div>
