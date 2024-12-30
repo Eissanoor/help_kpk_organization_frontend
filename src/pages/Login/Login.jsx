@@ -49,7 +49,7 @@ const Login = () => {
         if (response.status === 200 && response.success) {
           const token = response.data.token;
           localStorage.setItem('authToken', token); // Save token to localStorage
-          console.log("token--", token);
+          
           
           console.log("Login successful:", response.message);
           navigate("/dashboard");
@@ -186,7 +186,7 @@ const Login = () => {
               <p className="text-sm !mt-8 text-center text-gray-800">
                 Don't have an account?
                 <a  href="#"
-                className="#183702 font-semibold hover:underline ml-1" onClick={() => navigate("/register")}>
+                className="#183702 font-semibold hover:underline ml-1">
                   Register here
                 </a>
               </p>
