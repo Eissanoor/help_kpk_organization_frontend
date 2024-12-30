@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { login } from "./loginApi"; // Import the login service
 import Toast from '../../components/Toast'; // Import the Toast component
 import myLogo from "../../assets/logo.png";
+import Loader from '../../components/Loader'; // Import the Loader component
+
 const Login = () => {
     const navigate = useNavigate(); // React Router navigate function
   // State for input fields
@@ -15,6 +17,7 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [toastMessage, setToastMessage] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   // Handle input changes
   const handleChange = (e) => {
@@ -44,6 +47,7 @@ const Login = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
+      setLoading(true); // Set loading to true before API call
       try {
         const response = await login(formData.email, formData.password);
         if (response.status === 200 && response.success) {
@@ -62,6 +66,8 @@ const Login = () => {
         setToastMessage(error.message); // Display error in toast
         setToastVisible(true);
         setTimeout(() => setToastVisible(false), 3000); // Hide after 3 seconds
+      } finally {
+        setLoading(false); // Set loading to false after API call
       }
     }
   }
@@ -89,6 +95,9 @@ const Login = () => {
 
   return (
     <div className="font-[sans-serif]">
+      {/* Loader */}
+      {loading && <Loader />} {/* Show loader when loading is true */}
+
       {/* Toast Notification */}
       <Toast message={toastMessage} visible={toastVisible} />
 
@@ -177,8 +186,9 @@ const Login = () => {
                 <button
                   type="submit"
                   className="w-full shadow-xl py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-green-800 hover:bg-green-900 focus:outline-none"
+                  disabled={loading} // Disable button while loading
                 >
-                  Log in
+                  {loading ? "Loading..." : "Log in"} {/* Change button text */}
                 </button>
               </div>
 
