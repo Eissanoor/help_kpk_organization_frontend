@@ -126,14 +126,14 @@ const CreateEntity = () => {
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Username</label>
             <input type="text" name="username" value={formData.username} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter username"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-blue-500 rounded outline-none" required />
+              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
             {errors.username && <span className="text-red-500 text-sm">{errors.username}</span>}
           </div>
 
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Email</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter email"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-blue-500 rounded outline-none" required />
+              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
             {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
           </div>
          
@@ -142,27 +142,27 @@ const CreateEntity = () => {
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} autoComplete="new-password" placeholder="Enter password"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-blue-500 rounded outline-none" required />
+              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
             {errors.password && <span className="text-red-500 text-sm">{errors.password}</span>}
           </div>
 
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Phone Number</label>
             <input type="number" name="phonenumber" value={formData.phonenumber} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter phone number"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-blue-500 rounded outline-none" required />
+              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
             {errors.phonenumber && <span className="text-red-500 text-sm">{errors.phonenumber}</span>}
           </div>
 
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Location</label>
             <input type="text" name="location" value={formData.location} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter location"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-blue-500 rounded outline-none" required />
+              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
             {errors.location && <span className="text-red-500 text-sm">{errors.location}</span>}
           </div>
         </div>
 
         <button type="button" onClick={handleCreateEntity}
-          className="mt-8 px-6 py-2.5 w-full text-sm bg-blue-700 text-white rounded hover:bg-blue-600 transition-all">Submit</button>
+          className="mt-8 px-6 py-2.5 w-full text-sm bg-green-800 text-white rounded hover:bg-green-700 transition-all">Submit</button>
       </form>
     </>
   );

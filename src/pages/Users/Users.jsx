@@ -85,7 +85,7 @@ const User = () => {
         <h2 className="mr-5 text-4xl font-bold leading-none md:text-5xl">Users</h2>
         <AddNewButton />
       </div>
-      <Paper style={{ height: 500, width: '100%', overflow: 'hidden' }}>
+      <Paper style={{ height: 500, width: '100%' }}>
         <DataGrid
          rows={users}
          columns={columns}
@@ -94,7 +94,7 @@ const User = () => {
          getRowId={(row) => row._id}
          sx={{
            '& .MuiDataGrid-columnHeader': {
-             backgroundColor: 'blue',
+             backgroundColor: '#005C4B',
              color: 'white',
            },
            '& .MuiDataGrid-root': {
