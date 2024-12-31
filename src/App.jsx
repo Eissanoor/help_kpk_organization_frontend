@@ -4,7 +4,9 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard"
 import Product from "./pages/Product/Product";
-import Requested from "./pages/Requested/Requested";
+import Requested from "./pages/Requesteddisable/Requesteddisable";
+import RequestedMember from "./pages/RequestedMember/RequestedMember";
+import RequestedSchool from "./pages/RequestedSchool/RequestedSchool";
 import User from "./pages/Users/Users";
 import Completedrequest from "./pages/completedRequest/completedRequest";
 import Location from "./pages/Location/location";
@@ -22,6 +24,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/product" element={<Product />} />
         <Route path="/requested" element={<Requested />} />
+        <Route path="/requestedmember" element={<RequestedMember />} />
+        <Route path="/requestedschool" element={<RequestedSchool />} />
         <Route path="/user" element={<User />} />
         <Route path="/completedrequest" element={<Completedrequest />} />
         <Route path="/location" element={<Location />} />

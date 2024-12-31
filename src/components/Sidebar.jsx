@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import myLogo from "../assets/logo.png"; // Import your logo
-
+import AccessibleIcon from '@mui/icons-material/Accessible';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 const Sidebar = () => {
     const navigate = useNavigate(); // React Router navigate function
     return (
@@ -60,20 +62,25 @@ const Sidebar = () => {
               <a 
                 className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
                 onClick={() => navigate("/requested")}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-[18px] h-[18px] mr-4"
-                  viewBox="0 0 510 510">
-                  <g fillOpacity=".9">
-                    <path
-                      d="M255 0C114.75 0 0 114.75 0 255s114.75 255 255 255 255-114.75 255-255S395.25 0 255 0zm0 459c-112.2 0-204-91.8-204-204S142.8 51 255 51s204 91.8 204 204-91.8 204-204 204z"
-                      data-original="#000000" />
-                    <path d="M267.75 127.5H229.5v153l132.6 81.6 20.4-33.15-114.75-68.85z" data-original="#000000" />
-                  </g>
-                </svg>
-                <span>Requested</span>
+                <AccessibleIcon fill="currentColor" className="w-[18px] h-[18px] mr-4" />
+                <span>Disable Requested</span>
               </a>
             </li>
             <li>
-             
+              <a 
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
+                onClick={() => navigate("/requestedmember")}>
+                 <GroupAddOutlinedIcon fill="currentColor" className="w-[18px] h-[18px] mr-4" />
+                <span>Requested Member</span>
+              </a>
+            </li>
+            <li>
+              <a 
+                className="text-black hover:#183702 text-sm flex items-center hover:bg-green-100 rounded px-4 py-3 transition-all cursor-pointer"
+                onClick={() => navigate("/requestedschool")}>
+                 <SchoolOutlinedIcon fill="currentColor" className="w-[18px] h-[18px] mr-4" />
+                <span>Requested School</span>
+              </a>
             </li>
           </ul>
         </div>

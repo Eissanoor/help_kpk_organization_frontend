@@ -108,7 +108,7 @@ const User = () => {
             const selectedIDs = newSelection;
             const selectedRows = users.filter((user) => selectedIDs.includes(user._id));
             setCheckedUsers(selectedRows);
-          }}
+          }} 
         />
       </Paper>
       <Menu
