@@ -79,13 +79,25 @@ const RequestedMember = () => {
           Member Requested
         </h2>
       </div>
-      <div style={{ height: 400, width: '100%' }}>
+      <div style={{ height: 600, width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection
+          sx={{
+            '& .MuiDataGrid-columnHeader': {
+              backgroundColor: '#005C4B',
+              color: 'white',
+            },
+            '& .MuiDataGrid-root': {
+              overflowX: 'hidden', // Prevent horizontal scrollbars
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              borderTopRightRadius: '0px', // Ensure no unexpected rounding
+            },
+          }}
         />
       </div>
     </section>

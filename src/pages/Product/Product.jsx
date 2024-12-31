@@ -103,7 +103,7 @@ const Product = () => {
           getRowId={(row) => row._id}
           sx={{
             '& .MuiDataGrid-columnHeader': {
-              backgroundColor: 'blue',
+              backgroundColor: '#005C4B',
               color: 'white',
             },
             '& .MuiDataGrid-root': {
