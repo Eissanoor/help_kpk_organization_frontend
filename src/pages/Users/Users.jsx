@@ -9,6 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 const User = () => {
   const [users, setUsers] = useState([]);
+  
+  
   const [checkedUsers, setCheckedUsers] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -27,6 +29,7 @@ const User = () => {
         const data = await response.json();
         if (data.success) {
           setUsers(data.data);
+          console.log('Fetched Users:', data.data);
         }
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -64,12 +67,26 @@ const User = () => {
   const columns = [
     { field: 'username', headerName: 'Name', width: 150 },
     { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'location', headerName: 'Location', width: 250 },
+    {
+      field: 'locationId', 
+      headerName: 'Location', 
+      width: 250,
+      valueGetter: (params) => {
+        console.log("params",params[0].locationName);
+        
+        if (params[0].locationName) {
+          const locationName = params[0].locationName;
+          console.log("locationName",locationName);
+          
+          return locationName || 'N/A';
+        }
+        return 'N/A';
+      },
+    },
     { field: 'phonenumber', headerName: 'Phone Number', width: 180 },
     {
-      field: 'actions',headerName: 'Actions',width: 140,
+      field: 'actions', headerName: 'Actions', width: 140,
       renderCell: (params) => (
-        
         <div>
           <button onClick={(event) => handleMenuClick(event, params.row)}><MoreHorizIcon /></button>
         </div>

@@ -11,7 +11,7 @@ const CreateEntity = () => {
     email: '',
     password: '',
     phonenumber: '',
-    location: ''
+    locationId: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -40,6 +40,17 @@ const CreateEntity = () => {
         }));
       }
     }
+
+    // New locationId validation
+    if (name === 'locationId' && value) {
+      const locationIdPattern = /^[a-f0-9]{24}$/; // Example pattern for a MongoDB ObjectId
+      if (!locationIdPattern.test(value)) {
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          locationId: 'Please enter a valid locationId.'
+        }));
+      }
+    }
   };
 
   const handleInvalid = (e) => {
@@ -58,8 +69,8 @@ const CreateEntity = () => {
         case 'phonenumber':
           e.target.setCustomValidity('Please enter a phone number.');
           break;
-        case 'location':
-          e.target.setCustomValidity('Please enter a location.');
+        case 'locationId':
+          e.target.setCustomValidity('Please enter a locationId.');
           break;
         default:
           break;
@@ -101,7 +112,7 @@ const CreateEntity = () => {
           email: '',
           password: '',
           phonenumber: '',
-          location: ''
+          locationId: ''
         });
       } else {
         const errorData = await response.json();
@@ -155,9 +166,9 @@ const CreateEntity = () => {
 
           <div className="relative flex items-center">
             <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Location</label>
-            <input type="text" name="location" value={formData.location} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter location"
+            <input type="text" name="locationId" value={formData.locationId} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter locationId"
               className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
-            {errors.location && <span className="text-red-500 text-sm">{errors.location}</span>}
+            {errors.locationId && <span className="text-red-500 text-sm">{errors.locationId}</span>}
           </div>
         </div>
 
