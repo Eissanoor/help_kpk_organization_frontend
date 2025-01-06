@@ -68,7 +68,7 @@ const Product = () => {
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
-        src={`https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp`} // Adjust the path as needed
+        src={`http://localhost:5020/uploads/signatureApplicant-1735731222854-53850242.png`} // Adjust the path as needed
         className="w-10 h-10 object-cover"
         alt={params.row.productName} 
        />
