@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import Sidebar from "../../components/Sidebar";
 import { API_BASE_URL } from '../../config/Config';
 import { ToastContainer, toast } from 'react-toastify';
+import Autocomplete from '@mui/material/Autocomplete';
 import 'react-toastify/dist/ReactToastify.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 
 const CreateEntity = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +20,11 @@ const CreateEntity = () => {
   const [errors, setErrors] = useState({});
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [locations, setLocations] = useState([]);
+  const [loadingLocations, setLoadingLocations] = useState(false);
+
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
@@ -80,6 +88,21 @@ const CreateEntity = () => {
 
   const handleInput = (e) => {
     e.target.setCustomValidity('');
+  };
+
+  const handleLocationOpen = async () => {
+    setLoadingLocations(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/location/get-all-location`);
+      const result = await response.json();
+      if (result.success) {
+        setLocations(result.data);
+      }
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    } finally {
+      setLoadingLocations(false);
+    }
   };
 
   const handleCreateEntity = async () => {
@@ -165,11 +188,44 @@ const CreateEntity = () => {
           </div>
 
           <div className="relative flex items-center">
-            <label className="text-[13px] bg-white text-black absolute px-2 top-[-10px] left-[18px]">Location</label>
-            <input type="text" name="locationId" value={formData.locationId} onChange={handleChange} onInvalid={handleInvalid} onInput={handleInput} placeholder="Enter locationId"
-              className="px-4 py-3.5 bg-white text-black w-full text-sm border-2 border-gray-100 focus:border-green-500 rounded outline-none" required />
-            {errors.locationId && <span className="text-red-500 text-sm">{errors.locationId}</span>}
+            <Autocomplete
+              sx={{ width: '100%' }}
+              open={autocompleteOpen}
+              onOpen={() => {
+                setAutocompleteOpen(true);
+                handleLocationOpen();
+              }}
+              onClose={() => setAutocompleteOpen(false)}
+              options={locations}
+              getOptionLabel={(option) => option.locationName}
+              onChange={(event, value) => {
+                console.log("value",value._id);
+                
+                setFormData(prev => ({
+                  ...prev,
+                  locationId:  value._id
+                }));
+                setAutocompleteOpen(false);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Location"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loadingLocations ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+              )}
+            />
           </div>
+
+
         </div>
 
         <button type="button" onClick={handleCreateEntity}
