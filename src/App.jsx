@@ -14,6 +14,8 @@ import CreateNewUser from "./pages/Users/CreateNewUser";
 import CreateNewProduct from "./pages/Product/CreateNewProduct";
 import UpdateProduct from "./pages/Product/updateProduct";
 import ViewProduct from "./pages/Product/ViewProduct"
+import ViewUser from "./pages/Users/viewUser";
+import UpdateUser from "./pages/Users/updateUser";
 function App() {
   return (
     <Router>
@@ -33,6 +35,8 @@ function App() {
         <Route path="/create-new-product" element={<CreateNewProduct />} />
         <Route path="/view-product" element={<ViewProduct />} />
         <Route path="/update-product" element={<UpdateProduct />} />
+        <Route path="/view-user" element={<ViewUser />} />
+        <Route path="/update-user" element={<UpdateUser />} />
         <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
       </Routes>
     </Router>

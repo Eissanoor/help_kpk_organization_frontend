@@ -7,6 +7,11 @@ import Paper from '@mui/material/Paper';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const User = () => {
   const [users, setUsers] = useState([]);
   
@@ -14,7 +19,8 @@ const User = () => {
   const [checkedUsers, setCheckedUsers] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const navigate = useNavigate();
   const handleCheckboxChange = (userId) => {
     setCheckedUsers(prev => ({
       ...prev,
@@ -29,7 +35,7 @@ const User = () => {
         const data = await response.json();
         if (data.success) {
           setUsers(data.data);
-          console.log('Fetched Users:', data.data);
+          
         }
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -52,16 +58,40 @@ const User = () => {
   const handleView = () => {
     console.log('View user:', selectedUser);
     handleClose();
+    navigate('/view-user', { state: { userId: selectedUser._id } });
   };
 
   const handleUpdate = () => {
     console.log('Update user:', selectedUser);
     handleClose();
+    navigate('/update-user', { state: { userId: selectedUser._id } });
+  }
+  const handleDelete = () => {
+    setOpenDialog(true);
   };
 
-  const handleDelete = () => {
-    console.log('Delete user:', selectedUser);
-    handleClose();
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/${selectedUser._id}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (data.success) {
+        console.log('User deleted:', selectedUser);
+        setUsers(prevUsers => prevUsers.filter(user => user._id !== selectedUser._id));
+        toast.success('User deleted successfully!');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Error deleting user. Please try again.');
+    } finally {
+      setOpenDialog(false);
+      handleClose();
+    }
+  };
+
+  const handleCancel = () => {
+    setOpenDialog(false);
   };
 
   const columns = [
@@ -72,11 +102,11 @@ const User = () => {
       headerName: 'Location', 
       width: 250,
       valueGetter: (params) => {
-        console.log("params",params[0].locationName);
+       
         
         if (params[0].locationName) {
           const locationName = params[0].locationName;
-          console.log("locationName",locationName);
+         
           
           return locationName || 'N/A';
         }
@@ -137,6 +167,25 @@ const User = () => {
         <MenuItem onClick={handleUpdate}>Update</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
+
+      <Dialog open={openDialog} onClose={handleCancel}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="primary">
+            No
+          </Button>
+          <Button onClick={confirmDelete} color="secondary">
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ToastContainer />
     </section>
     </>
   );
