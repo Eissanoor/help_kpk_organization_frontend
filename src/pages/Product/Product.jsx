@@ -68,7 +68,7 @@ const Product = () => {
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
-        src={`http://localhost:5020/uploads/signatureApplicant-1735731222854-53850242.png`} // Adjust the path as needed
+        src={`${API_BASE_URL}/${params.row.image}`}
         className="w-10 h-10 object-cover"
         alt={params.row.productName} 
        />
