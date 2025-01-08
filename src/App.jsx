@@ -16,6 +16,9 @@ import UpdateProduct from "./pages/Product/updateProduct";
 import ViewProduct from "./pages/Product/ViewProduct"
 import ViewUser from "./pages/Users/viewUser";
 import UpdateUser from "./pages/Users/updateUser";
+import CreateNewLocation from "./pages/Location/CreateNewLocation";
+import ViewLocation from "./pages/Location/ViewLocation";
+import UpdateLocation from "./pages/Location/updateLocation";
 function App() {
   return (
     <Router>
@@ -37,6 +40,9 @@ function App() {
         <Route path="/update-product" element={<UpdateProduct />} />
         <Route path="/view-user" element={<ViewUser />} />
         <Route path="/update-user" element={<UpdateUser />} />
+        <Route path="/view-location" element={<ViewLocation />} />
+        <Route path="/update-location" element={<UpdateLocation />} />
+        <Route path="/create-new-location" element={<CreateNewLocation />} />
         <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
       </Routes>
     </Router>
