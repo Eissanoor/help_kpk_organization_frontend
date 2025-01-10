@@ -1,28 +1,48 @@
 import Sidebar from "../../components/Sidebar";
 import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import { API_BASE_URL } from '../../config/Config';
 const RequestedMember = () => {
   const [open, setOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [rows, setRows] = useState([]);
+console.log("rows",rows);
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/member/getmember`);
+        const result = await response.json();
+        console.log("result",result);
+        if (result.success) {
+          const formattedRows = result.data.map(member => ({
+            id: member._id,
+            childName: member.childName,
+            contactNumber: member.contactNumber,
+            noOfChildren: member.noOfChildren,
+            noOfDependents: member.noOfDependents,
+            bloodGroup: member.bloodGroup,
+          }));
+          setRows(formattedRows);
+        }
+      } catch (error) {
+        console.error('Error fetching members:', error);
+      }
+    };
 
-  const rows = [
-    { id: 1, product: 'Light Gray T-Shirt', price: '$25.00', inStock: 90, sales: 200, rating: 4 },
-    { id: 2, product: 'Black T-Shirt', price: '$30.00', inStock: 80, sales: 230, rating: 5 },
-    // Add more static data as needed
-  ];
+    fetchMembers();
+  }, []);
 
   const columns = [
-    { field: 'product', headerName: 'Product', width: 200 },
-    { field: 'price', headerName: 'Price', width: 100 },
-    { field: 'inStock', headerName: 'In stock', width: 100 },
-    { field: 'sales', headerName: 'Sales', width: 100 },
-    { field: 'rating', headerName: 'Rating', width: 100 },
+    { field: 'childName', headerName: 'Child Name', width: 200 },
+    { field: 'contactNumber', headerName: 'Contact Number', width: 150 },
+    { field: 'noOfChildren', headerName: 'No. of Children', width: 150 },
+    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 150 },
+    { field: 'bloodGroup', headerName: 'Blood Group', width: 100 },
     {
       field: 'action', headerName: 'Action', width: 100,
       renderCell: (params) => (

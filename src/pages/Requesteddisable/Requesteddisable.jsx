@@ -30,7 +30,7 @@ const Requested = () => {
   }, []);
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'childName', headerName: 'Name', width: 200 },
     { field: 'status', headerName: 'Status', width: 100 },
     { field: 'phoneNo', headerName: 'Phone No', width: 150 },
     { field: 'registrationNo', headerName: 'Registration No', width: 150 },
