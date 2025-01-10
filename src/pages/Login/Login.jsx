@@ -73,11 +73,9 @@ const Login = () => {
   }
   function validateForm(email, password) {
     if (!email) {
-        console.log("email is required.");
         return false;
     }
     if (!password) {
-        console.log("Password is required.");
         return false;
     }
     return true;
@@ -175,7 +173,7 @@ const Login = () => {
                 </div>
 
                 <div className="text-sm">
-                  <a href="javascript:void(0);" className="#183702 hover:underline font-semibold">
+                  <a href="#" className="#183702 hover:underline font-semibold">
                     Forgot your password?
                   </a>
                 </div>
