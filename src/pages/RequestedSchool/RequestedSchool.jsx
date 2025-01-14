@@ -1,28 +1,46 @@
 import Sidebar from "../../components/Sidebar";
 import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { API_BASE_URL } from '../../config/Config';
 
 const RequestedSchool = () => {
   const [open, setOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [rows, setRows] = useState([]);
 
-  const rows = [
-    { id: 1, product: 'Light Gray T-Shirt', price: '$25.00', inStock: 90, sales: 200, rating: 4 },
-    { id: 2, product: 'Black T-Shirt', price: '$30.00', inStock: 80, sales: 230, rating: 5 },
-    // Add more static data as needed
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/school/getallschool`);
+        const result = await response.json();
+        if (result.success) {
+        const formattedRows = result.data.map(item => ({
+          id: item._id,
+          childName: item.childName,
+          fatherName: item.fatherName,
+          motherName: item.motherName,
+          position: item.position,
+        }));
+        setRows(formattedRows);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    };
+
+    fetchData();
+  }, []);
 
   const columns = [
-    { field: 'product', headerName: 'Product', width: 200 },
-    { field: 'price', headerName: 'Price', width: 100 },
-    { field: 'inStock', headerName: 'In stock', width: 100 },
-    { field: 'sales', headerName: 'Sales', width: 100 },
-    { field: 'rating', headerName: 'Rating', width: 100 },
+    { field: 'childName', headerName: 'Child Name', width: 200 },
+    { field: 'fatherName', headerName: 'Father Name', width: 200 },
+    { field: 'motherName', headerName: 'Mother Name', width: 200 },
+    { field: 'position', headerName: 'Position', width: 100 },
     {
       field: 'action', headerName: 'Action', width: 100,
       renderCell: (params) => (
