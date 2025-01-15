@@ -72,7 +72,7 @@ const UpdateProduct = () => {
     <>
       <ToastContainer />
       <Sidebar />
-      <form className="font-[sans-serif] m-20 max-w-4xl mx-auto" onSubmit={(e) => {
+      <form className="font-[sans-serif] max-w-4xl mx-auto sm:px-6 sm:py-4 py-2 lg:ml-[250px]" onSubmit={(e) => {
           
           e.preventDefault();
           handleCreateEntity();

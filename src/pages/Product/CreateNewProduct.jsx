@@ -42,7 +42,7 @@ const CreateNewProduct = () => {
     <>
       <ToastContainer />
       <Sidebar />
-      <form className="font-[sans-serif] m-20 max-w-4xl mx-auto" onSubmit={(e) => {
+      <form className="font-[sans-serif] mx-auto sm:py-4 py-2 sm:px-6 px-3 lg:ml-[250px]" onSubmit={(e) => {
         e.preventDefault();
         handleCreateEntity(productName, productDescription, imageFile);
       }}>

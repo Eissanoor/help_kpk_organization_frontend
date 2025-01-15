@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../../components/Sidebar";
-import Navbar from "../../components/navbar"
+
 const Dashboard = () => {
   const navigate = useNavigate(); // Use the navigate hook
 
@@ -41,49 +40,44 @@ const Dashboard = () => {
   ];
 
   return (
-    <>
-      <Sidebar />
-      {/* <Navbar /> */}
-      <section className="flex flex-col justify-center max-w-5xl  px-4 py-10 mx-auto sm:px-6">
+    <section className="flex flex-col justify-center px-4 py-10 mx-auto sm:px-6 lg:ml-[250px]">
+      <div className="flex flex-wrap items-center justify-between mb-20">
+        <h2 className="mr-10 text-4xl font-bold leading-none md:text-5xl">
+          Dashboard
+        </h2>
+      </div>
 
-        <div className="flex flex-wrap items-center justify-between mb-20">
-          <h2 className="mr-10 text-4xl font-bold leading-none md:text-5xl">
-            Dashboard
-          </h2>
-        </div>
-
-        <div className="flex flex-wrap -mx-4">
-          {cardData.map((card) => (
-            <div
-              key={card.id}
-              className="w-full max-w-full mb-8 sm:w-1/2 px-4 lg:w-1/3 flex flex-col cursor-pointer"
-              onClick={card.onClick}
-            >
-              <div className="flex flex-grow">
-                <div className="triangle"></div>
-                <div className="flex flex-col justify-between px-4 py-6 bg-white border border-gray-400 text rounded-md">
-                  
-                  <div>
-                    <h3 className="block mb-4 text-2xl font-black leading-tight hover:underline hover:text-blue-600">
-                      {card.title}
-                    </h3>
-                    <p className="mb-4">{card.description}</p>
-                  </div>
-                  <div>
-                    <h3
-                      onClick={card.onClick}
-                      className="inline-block pb-1 mt-2 text-base font-black text-blue-600 uppercase border-b border-transparent hover:border-blue-600"
-                    >
-                      Go to
-                    </h3>
-                  </div>
+      <div className="flex flex-wrap -mx-4">
+        {cardData.map((card) => (
+          <div
+            key={card.id}
+            className="w-full max-w-full mb-8 sm:w-1/2 px-4 lg:w-1/3 flex flex-col cursor-pointer"
+            onClick={card.onClick}
+          >
+            <div className="flex flex-grow">
+              <div className="triangle"></div>
+              <div className="flex flex-col justify-between px-4 py-6 bg-white border border-gray-400 text rounded-md">
+                
+                <div>
+                  <h3 className="block mb-4 text-2xl font-black leading-tight hover:underline hover:text-blue-600">
+                    {card.title}
+                  </h3>
+                  <p className="mb-4">{card.description}</p>
+                </div>
+                <div>
+                  <h3
+                    onClick={card.onClick}
+                    className="inline-block pb-1 mt-2 text-base font-black text-blue-600 uppercase border-b border-transparent hover:border-blue-600"
+                  >
+                    Go to
+                  </h3>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-    </>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 };
 

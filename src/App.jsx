@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { SidebarProvider } from "./context/SidebarContext";
+import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -21,31 +23,47 @@ import ViewLocation from "./pages/Location/ViewLocation";
 import UpdateLocation from "./pages/Location/updateLocation";
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/requested" element={<Requested />} />
-        <Route path="/requestedmember" element={<RequestedMember />} />
-        <Route path="/requestedschool" element={<RequestedSchool />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/completedrequest" element={<Completedrequest />} />
-        <Route path="/location" element={<Location />} />
-        <Route path="/create-new-user" element={<CreateNewUser />} />
-        <Route path="/create-new-product" element={<CreateNewProduct />} />
-        <Route path="/view-product" element={<ViewProduct />} />
-        <Route path="/update-product" element={<UpdateProduct />} />
-        <Route path="/view-user" element={<ViewUser />} />
-        <Route path="/update-user" element={<UpdateUser />} />
-        <Route path="/view-location" element={<ViewLocation />} />
-        <Route path="/update-location" element={<UpdateLocation />} />
-        <Route path="/create-new-location" element={<CreateNewLocation />} />
-        <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
-      </Routes>
-    </Router>
+    <SidebarProvider>
+      <Router>
+        <div className="flex">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route
+              path="/*"
+              element={
+                <>
+                  <Sidebar />
+                  <div className="flex-1">
+                    <Routes>
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/product" element={<Product />} />
+                      <Route path="/requested" element={<Requested />} />
+                      <Route path="/requestedmember" element={<RequestedMember />} />
+                      <Route path="/requestedschool" element={<RequestedSchool />} />
+                      <Route path="/user" element={<User />} />
+                      <Route path="/completedrequest" element={<Completedrequest />} />
+                      <Route path="/location" element={<Location />} />
+                      <Route path="/create-new-user" element={<CreateNewUser />} />
+                      <Route path="/create-new-product" element={<CreateNewProduct />} />
+                      <Route path="/view-product" element={<ViewProduct />} />
+                      <Route path="/update-product" element={<UpdateProduct />} />
+                      <Route path="/view-user" element={<ViewUser />} />
+                      <Route path="/update-user" element={<UpdateUser />} />
+                      <Route path="/view-location" element={<ViewLocation />} />
+                      <Route path="/update-location" element={<UpdateLocation />} />
+                      <Route path="/create-new-location" element={<CreateNewLocation />} />
+                      <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
+                    </Routes>
+                  </div>
+                </>
+              }
+            />
+          </Routes>
+        </div>
+      </Router>
+    </SidebarProvider>
   );
 }
 

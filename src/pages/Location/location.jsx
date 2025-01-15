@@ -80,7 +80,7 @@ const Location = () => {
   return (
     <>
     <Sidebar/>
-    <section className="flex flex-col justify-center max-w-5xl px-4 py-10 mx-auto sm:px-10">
+    <section className="flex flex-col justify-center max-w-5xl px-4 mx-auto sm:px-6 sm:py-4 py-2 sm:ml-[250px]">
       
       <div className="mb-10  ">
         <h2 className="mr-5 text-4xl font-bold leading-none md:text-5xl">Locations</h2>

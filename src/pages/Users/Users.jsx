@@ -13,8 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const User = () => {
-  const [users, setUsers] = useState([]);
-  
+  const [users, setUsers] = useState([]);  
   
   const [checkedUsers, setCheckedUsers] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
@@ -126,7 +125,7 @@ const User = () => {
 
   return (
     <>
-    <section className="flex flex-col justify-center max-w-5xl px-4 py-10 mx-auto sm:px-10" 
+    <section className="flex flex-col justify-center max-w-5xl px-4 py-10 mx-auto sm:px-6 lg:ml-[250px]" 
     >
       <Sidebar/>
       <div className="mb-10 ">

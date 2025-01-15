@@ -93,14 +93,20 @@ const Login = () => {
 
   return (
     <div className="font-[sans-serif]">
-      {/* Loader */}
-      {loading && <Loader />} {/* Show loader when loading is true */}
-
-      {/* Toast Notification */}
+      {loading && <Loader />}
       <Toast message={toastMessage} visible={toastVisible} />
 
       <div className="min-h-screen flex items-center justify-center py-6 px-4">
-        <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full">
+        <div className="grid md:grid-cols-2 items-center gap-4 max-w-6xl w-full max-md:grid-cols-1 max-md:grid-flow-row">
+          {/* Image - Moved above form for mobile */}
+          <div className="lg:h-[400px] md:h-[300px] max-md:order-first">
+            <img
+              src={myLogo}
+              className="w-2/4 h-2/3 max-md:w-2/5 mx-auto block object-cover"
+              alt="Login Illustration"
+            />
+          </div>
+
           {/* Login Form */}
           <div className="border border-gray-300 rounded-lg p-6 max-w-md shadow-lg max-md:mx-auto">
             <form className="space-y-4" onSubmit={handleSubmit} noValidate>
@@ -199,15 +205,6 @@ const Login = () => {
                 </a>
               </p>
             </form>
-          </div>
-
-          {/* Image */}
-          <div className="lg:h-[400px] md:h-[300px] max-md:mt-8">
-            <img
-              src={myLogo}
-              className="w-2/4 h-2/3 max-md:w-2/5 mx-auto block object-cover"
-              alt="Login Illustration"
-            />
           </div>
         </div>
       </div>

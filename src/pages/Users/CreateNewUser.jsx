@@ -150,7 +150,7 @@ const CreateEntity = () => {
     <>
       <ToastContainer />
       <Sidebar />
-      <form className="font-[sans-serif] m-20 max-w-4xl mx-auto">
+      <form className="font-[sans-serif] m-20 max-w-4xl mx-auto sm:px-6 lg:ml-[250px]">
         <div className="flex flex-wrap items-center justify-between mb-10">
           <h2 className="mr-5 text-4xl font-bold leading-none md:text-4xl">
             Add New Users
