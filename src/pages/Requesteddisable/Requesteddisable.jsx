@@ -12,6 +12,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { API_BASE_URL } from "../../config/Config";
 import Sidebar from "../../components/Sidebar";
+import ViewDisablePopUp from './ViewDisablePopUp';
+
 const Requested = () => {
   const [rows, setRows] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -20,6 +22,7 @@ const Requested = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [currentAction, setCurrentAction] = useState("");
+  const [viewData, setViewData] = useState(null);
 
   // Fetch rows for the table
   useEffect(() => {
@@ -64,7 +67,11 @@ const Requested = () => {
     handleCloseMenu();
 
     if (action === "Alerting") {
-      fetchProductOptions(); // Fetch product options when the dialog opens for alerting
+      fetchProductOptions();
+    }
+    
+    if (action === "view" && selectedRow) {
+      setViewData(selectedRow);
     }
   };
 
@@ -121,7 +128,7 @@ const Requested = () => {
 
   return (
     <>
-    <Sidebar/>
+    {/* <Sidebar/> */}
       <section className="flex flex-col justify-center px-4 mx-auto sm:px-6 sm:py-4 py-2 sm:ml-[250px]">
         <div className="flex flex-wrap items-center justify-between mb-10">
           <h2 className="mr-5 text-4xl font-bold leading-none md:text-5xl">
@@ -142,7 +149,7 @@ const Requested = () => {
                 color: "white",
               },
               "& .MuiDataGrid-root": {
-                overflowX: "hidden", // Prevent horizontal scrollbars
+                overflowX: "hidden",
               },
             }}
           />
@@ -161,10 +168,17 @@ const Requested = () => {
       </Menu>
 
       {/* Dialog with Autocomplete */}
-      <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth>
+      <Dialog 
+        open={dialogOpen} 
+        onClose={handleCloseDialog} 
+        fullWidth
+        maxWidth={currentAction === "view" ? "lg" : "sm"}
+      >
         <DialogTitle>
           {currentAction === "Alerting"
             ? "Select Products for Alerting"
+            : currentAction === "view"
+            ? "View Details"
             : "Perform Action"}
         </DialogTitle>
         <DialogContent>
@@ -174,7 +188,7 @@ const Requested = () => {
               limitTags={2}
               id="multiple-limit-tags"
               options={productOptions}
-              getOptionLabel={(option) => option.productName} // Show productName in the dropdown
+              getOptionLabel={(option) => option.productName}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -183,19 +197,23 @@ const Requested = () => {
                 />
               )}
               onChange={(event, value) =>
-                setSelectedProductIds(value.map((item) => item._id)) // Save only the _id of selected products
+                setSelectedProductIds(value.map((item) => item._id))
               }
               sx={{ marginTop: 2 }}
             />
+          ) : currentAction === "view" ? (
+            <ViewDisablePopUp data={viewData} />
           ) : (
             <p>Other action content goes here.</p>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleConfirm} variant="contained" color="primary">
-            Confirm
-          </Button>
+          <Button onClick={handleCloseDialog}>Close</Button>
+          {currentAction === "Alerting" && (
+            <Button onClick={handleConfirm} variant="contained" color="primary">
+              Confirm
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>
