@@ -11,6 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import ViewRequestedSchool from './ViewRequestedSchool';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 const RequestedSchool = () => {
   const [open, setOpen] = useState(false);
@@ -21,6 +23,8 @@ const RequestedSchool = () => {
   const [completeData, setCompleteData] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewData, setViewData] = useState(null);
+  const [productOptions, setProductOptions] = useState([]);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -65,11 +69,26 @@ const RequestedSchool = () => {
     setSelectedRow(null);
   };
 
+  const fetchProductOptions = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/product/getallproduct`);
+      const data = await response.json();
+      setProductOptions(data.data);
+    } catch (error) {
+      console.error("Error fetching product options:", error);
+    }
+  };
+
   const handleOpenDialog = (action) => {
     setCurrentAction(action);
     setDialogOpen(true);
-    handleCloseMenu();
     
+    if (action === "Alerting") {
+      fetchProductOptions();
+    } else {
+      handleCloseMenu();
+    }
+
     if (action === "view" && selectedRow) {
       setViewData(completeData[selectedRow.id]);
     }
@@ -78,6 +97,31 @@ const RequestedSchool = () => {
   const handleCloseDialog = () => {
     setDialogOpen(false);
     setViewData(null);
+  };
+
+  const handleConfirm = async () => {
+    if (currentAction === "Alerting" && selectedRow) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/school/updateschoolproductids/${selectedRow.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ productIds: selectedProductIds }),
+          }
+        );
+        console.log("Response status:", response.status);
+        const result = await response.json();
+        console.log("Update response:", result);
+      } catch (error) {
+        console.error("Error updating product IDs:", error);
+      }
+    }
+
+    handleCloseDialog();
+    console.log("Dialog closed after confirm.");
   };
 
   const columns = [
@@ -138,22 +182,45 @@ const RequestedSchool = () => {
         onClose={handleCloseMenu}
       >
         <MenuItem onClick={() => handleOpenDialog('view')}>View</MenuItem>
-        <MenuItem onClick={() => handleOpenDialog('update')}>Update</MenuItem>
+        <MenuItem onClick={() => handleOpenDialog('Alerting')}>Alerting</MenuItem>
         <MenuItem onClick={() => handleOpenDialog('delete')}>Delete</MenuItem>
       </Menu>
 
-      {/* Dialog for View, Update, Delete */}
+      {/* Dialog with Autocomplete for Alerting */}
       <Dialog 
         open={dialogOpen} 
-        onClose={handleCloseDialog}
+        onClose={handleCloseDialog} 
         fullWidth
         maxWidth={currentAction === "view" ? "lg" : "sm"}
       >
         <DialogTitle>
-          {currentAction === "view" ? "View School Details" : "Perform Action"}
+          {currentAction === "Alerting"
+            ? "Select Products for Alerting"
+            : currentAction === "view"
+            ? "View School Details"
+            : "Perform Action"}
         </DialogTitle>
         <DialogContent>
-          {currentAction === "view" ? (
+          {currentAction === "Alerting" ? (
+            <Autocomplete
+              multiple
+              limitTags={2}
+              id="multiple-limit-tags"
+              options={productOptions}
+              getOptionLabel={(option) => option.productName}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Products"
+                  placeholder="Select products"
+                />
+              )}
+              onChange={(event, value) =>
+                setSelectedProductIds(value.map((item) => item._id))
+              }
+              sx={{ marginTop: 2 }}
+            />
+          ) : currentAction === "view" ? (
             <ViewRequestedSchool data={viewData} />
           ) : (
             <p>Other action content goes here.</p>
@@ -161,6 +228,11 @@ const RequestedSchool = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Close</Button>
+          {currentAction === "Alerting" && (
+            <Button onClick={handleConfirm} variant="contained" color="primary">
+              Confirm
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>
