@@ -18,6 +18,7 @@ const Requested = () => {
   const [rows, setRows] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
+  console.log("selectedRow--------------------- :", selectedRow);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
@@ -64,12 +65,13 @@ const Requested = () => {
   const handleOpenDialog = (action) => {
     setCurrentAction(action);
     setDialogOpen(true);
-    handleCloseMenu();
-
+    
     if (action === "Alerting") {
       fetchProductOptions();
+    } else {
+      handleCloseMenu();
     }
-    
+
     if (action === "view" && selectedRow) {
       setViewData(selectedRow);
     }
@@ -81,8 +83,17 @@ const Requested = () => {
   };
 
   const handleConfirm = async () => {
+   
+
     console.log("Selected Product IDs:", selectedProductIds);
     console.log("Current Action:", currentAction);
+    
+    // Check if selectedRow is not null before accessing _id
+    if (selectedRow) {
+      console.log("Selected Row ID:", selectedRow._id);
+    } else {
+      console.warn("No row selected.");
+    }
 
     if (currentAction === "Alerting" && selectedRow) {
       try {
@@ -96,6 +107,7 @@ const Requested = () => {
             body: JSON.stringify({ productIds: selectedProductIds }),
           }
         );
+        console.log("Response status:", response.status);
         const result = await response.json();
         console.log("Update response:", result);
       } catch (error) {
@@ -104,6 +116,7 @@ const Requested = () => {
     }
 
     handleCloseDialog();
+    console.log("Dialog closed after confirm.");
   };
 
   const columns = [
