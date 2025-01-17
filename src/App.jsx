@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "./context/SidebarContext.jsx";
+import { SidebarProvider } from "./Context/SidebarContext.jsx";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
