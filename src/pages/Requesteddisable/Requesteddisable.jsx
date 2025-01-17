@@ -120,11 +120,11 @@ const Requested = () => {
   };
 
   const columns = [
-    { field: "childName", headerName: "Name", width: 200 },
-    { field: "status", headerName: "Status", width: 100 },
-    { field: "phoneNo", headerName: "Phone No", width: 150 },
-    { field: "registrationNo", headerName: "Registration No", width: 150 },
-    { field: "submittionDate", headerName: "Submission Date", width: 150 },
+    { field: "childName", headerName: "Name", width: 250 },
+    { field: "status", headerName: "Status", width: 150 },
+    { field: "phoneNo", headerName: "Phone No", width: 200 },
+    { field: "registrationNo", headerName: "Registration No", width: 200 },
+    { field: "submittionDate", headerName: "Submission Date", width: 200 },
     {
       field: "actions",
       headerName: "Actions",
