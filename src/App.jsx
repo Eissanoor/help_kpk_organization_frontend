@@ -1,26 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "./src/Context/SidebarContext.jsx";
-import Sidebar from "./src/components/Sidebar.jsx";
-import Home from "./src/pages/Home/Home.jsx";
-import Login from "./src/pages/Login/Login.jsx";
-import Register from "./src/pages/Register/Register.jsx";
-import Dashboard from "./src/pages/Dashboard/Dashboard.jsx"
-import Product from "./src/pages/Product/Product.jsx";
-import Requested from "./src/pages/Requesteddisable/Requesteddisable.jsx";
-import RequestedMember from "./src/pages/RequestedMember/RequestedMember.jsx";
-import RequestedSchool from "./src/pages/RequestedSchool/RequestedSchool.jsx";
-import User from "./src/pages/Users/Users.jsx";
-import Completedrequest from "./src/pages/completedRequest/completedRequest.jsx";
-import Location from "./src/pages/Location/location.jsx";
-import CreateNewUser from "./src/pages/Users/CreateNewUser.jsx";
-import CreateNewProduct from "./src/pages/Product/CreateNewProduct.jsx";
-import UpdateProduct from "./src/pages/Product/updateProduct.jsx";
-import ViewProduct from "./src/pages/Product/ViewProduct.jsx"
-import ViewUser from "./src/pages/Users/viewUser.jsx";
-import UpdateUser from "./src/pages/Users/updateUser.jsx";
-import CreateNewLocation from "./src/pages/Location/CreateNewLocation.jsx";
-import ViewLocation from "./src/pages/Location/ViewLocation.jsx";
-import UpdateLocation from "./src/pages/Location/updateLocation.jsx";
+import { SidebarProvider } from "./Context/SidebarContext.jsx";
+import Sidebar from "./components/Sidebar.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Register from "./pages/Register/Register.jsx";
+import Dashboard from "./pages/Dashboard/Dashboard.jsx"
+import Product from "./pages/Product/Product.jsx";
+import Requested from "./pages/Requesteddisable/Requesteddisable.jsx";
+import RequestedMember from "./pages/RequestedMember/RequestedMember.jsx";
+import RequestedSchool from "./pages/RequestedSchool/RequestedSchool.jsx";
+import User from "./pages/Users/Users.jsx";
+import Completedrequest from "./pages/completedRequest/completedRequest.jsx";
+import Location from "./pages/Location/location.jsx";
+import CreateNewUser from "./pages/Users/CreateNewUser.jsx";
+import CreateNewProduct from "./pages/Product/CreateNewProduct.jsx";
+import UpdateProduct from "./pages/Product/updateProduct.jsx";
+import ViewProduct from "./pages/Product/ViewProduct.jsx"
+import ViewUser from "./pages/Users/viewUser.jsx";
+import UpdateUser from "./pages/Users/updateUser.jsx";
+import CreateNewLocation from "./pages/Location/CreateNewLocation.jsx";
+import ViewLocation from "./pages/Location/ViewLocation.jsx";
+import UpdateLocation from "./pages/Location/updateLocation.jsx";
 function App() {
   return (
     <SidebarProvider>
