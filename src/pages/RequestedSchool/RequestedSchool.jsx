@@ -139,7 +139,7 @@ const RequestedSchool = () => {
     { field: 'fatherName', headerName: 'Father Name', width: 200 },
     { field: 'motherName', headerName: 'Mother Name', width: 200 },
     { field: 'position', headerName: 'Position', width: 100 },
-    { field: 'bloodGroup', headerName: 'Blood Group', width: 1-0 },
+    { field: 'bloodGroup', headerName: 'Blood Group', width: 140 },
     { field: 'fatherCnic', headerName: 'Father CNIC', width: 180 },
   ];
 

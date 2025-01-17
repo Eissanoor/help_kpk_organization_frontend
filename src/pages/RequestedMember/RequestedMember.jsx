@@ -61,12 +61,12 @@ const RequestedMember = () => {
 
   const columns = [
     { field: 'childName', headerName: 'Child Name', width: 200 },
-    { field: 'contactNumber', headerName: 'Contact Number', width: 150 },
-    { field: 'noOfChildren', headerName: 'No. of Children', width: 150 },
-    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 150 },
-    { field: 'bloodGroup', headerName: 'Blood Group', width: 100 },
+    { field: 'contactNumber', headerName: 'Contact Number', width: 200 },
+    { field: 'noOfChildren', headerName: 'No. of Children', width: 200 },
+    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 200 },
+    { field: 'bloodGroup', headerName: 'Blood Group', width: 200 },
     {
-      field: 'action', headerName: 'Action', width: 100,
+      field: 'action', headerName: 'Action', width: 150,
       renderCell: (params) => (
         <div>
           <button onClick={(event) => handleMenuClick(event, params.row)}>
