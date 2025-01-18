@@ -1,13 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
-
+import { API_BASE_URL } from "../../config/Config";
 const ViewDisablePopUp = ({ data }) => {
 //   console.log(data);
   const dateRefs = Array(8)
   .fill(0)
   .map(() => useRef(null));
   const cnicRefs = Array(13).fill(0).map(() => useRef(null));
-  const API_BASE_URL = "https://fundapi.pakardi.com";
+  
 
   useEffect(() => {
     // Set CNIC digits into individual inputs
@@ -730,7 +730,7 @@ const ViewDisablePopUp = ({ data }) => {
                   <label className="block mb-2">CNIC Front Image</label>
                   <div className="border-2 border-dashed border-gray-400 h-48">
                     <img 
-                      src={`your_api_base_url/${data.cnicFrontPic}`}
+                      src={`${API_BASE_URL}/${data.cnicFrontPic}`}
                       alt="CNIC Front"
                       className="w-full h-full object-contain"
                     />
@@ -743,7 +743,7 @@ const ViewDisablePopUp = ({ data }) => {
                   <label className="block mb-2">CNIC Back Image</label>
                   <div className="border-2 border-dashed border-gray-400 h-48">
                     <img 
-                      src={`your_api_base_url/${data.cnicBackPic}`}
+                      src={`${API_BASE_URL}/${data.cnicBackPic}`}
                       alt="CNIC Back"
                       className="w-full h-full object-contain"
                     />

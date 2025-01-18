@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useSidebar } from "../context/SidebarContext";
+import { useSidebar } from "../Context/SidebarContext.jsx";
 import myLogo from "../assets/logo.png"; // Import your logo
 import AccessibleIcon from '@mui/icons-material/Accessible';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';

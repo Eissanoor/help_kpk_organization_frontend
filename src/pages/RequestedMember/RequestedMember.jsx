@@ -11,6 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import ViewRequestedMember from './ViewRequestedMember';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 const RequestedMember = () => {
   const [open, setOpen] = useState(false);
@@ -21,6 +23,8 @@ const RequestedMember = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [viewData, setViewData] = useState(null);
   const [completeData, setCompleteData] = useState({});
+  const [productOptions, setProductOptions] = useState([]);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
 
   console.log("rows",rows);
 
@@ -57,12 +61,12 @@ const RequestedMember = () => {
 
   const columns = [
     { field: 'childName', headerName: 'Child Name', width: 200 },
-    { field: 'contactNumber', headerName: 'Contact Number', width: 150 },
-    { field: 'noOfChildren', headerName: 'No. of Children', width: 150 },
-    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 150 },
-    { field: 'bloodGroup', headerName: 'Blood Group', width: 100 },
+    { field: 'contactNumber', headerName: 'Contact Number', width: 200 },
+    { field: 'noOfChildren', headerName: 'No. of Children', width: 200 },
+    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 200 },
+    { field: 'bloodGroup', headerName: 'Blood Group', width: 200 },
     {
-      field: 'action', headerName: 'Action', width: 100,
+      field: 'action', headerName: 'Action', width: 150,
       renderCell: (params) => (
         <div>
           <button onClick={(event) => handleMenuClick(event, params.row)}>
@@ -83,11 +87,26 @@ const RequestedMember = () => {
     setSelectedRow(null);
   };
 
+  const fetchProductOptions = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/product/getallproduct`);
+      const data = await response.json();
+      setProductOptions(data.data);
+    } catch (error) {
+      console.error("Error fetching product options:", error);
+    }
+  };
+
   const handleOpenDialog = (action) => {
     setCurrentAction(action);
     setDialogOpen(true);
-    handleCloseMenu();
     
+    if (action === "Alerting") {
+      fetchProductOptions();
+    } else {
+      handleCloseMenu();
+    }
+
     if (action === "view" && selectedRow) {
       setViewData(completeData[selectedRow.id]);
     }
@@ -95,21 +114,32 @@ const RequestedMember = () => {
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
-    setViewData(null);
+    setSelectedProductIds([]);
   };
 
-  const handleConfirm = () => {
-    if (currentAction === 'delete') {
-      console.log('Delete product:', selectedRow);
-      // Implement delete logic here
-    } else if (currentAction === 'update') {
-      console.log('Update product:', selectedRow);
-      // Implement update logic here
-    } else if (currentAction === 'view') {
-      console.log('View product:', selectedRow);
-      // Implement view logic here
+  const handleConfirm = async () => {
+    if (currentAction === "Alerting" && selectedRow) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/member/updatememberproductids/${selectedRow.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ productIds: selectedProductIds }),
+          }
+        );
+        console.log("Response status:", response.status);
+        const result = await response.json();
+        console.log("Update response:", result);
+      } catch (error) {
+        console.error("Error updating product IDs:", error);
+      }
     }
-    handleClose();
+
+    handleCloseDialog();
+    console.log("Dialog closed after confirm.");
   };
 
   return (
@@ -150,22 +180,45 @@ const RequestedMember = () => {
         onClose={handleCloseMenu}
       >
         <MenuItem onClick={() => handleOpenDialog('view')}>View</MenuItem>
-        <MenuItem onClick={() => handleOpenDialog('update')}>Update</MenuItem>
+        <MenuItem onClick={() => handleOpenDialog('Alerting')}>Alerting</MenuItem>
         <MenuItem onClick={() => handleOpenDialog('delete')}>Delete</MenuItem>
       </Menu>
 
-      {/* Dialog for View, Update, Delete */}
+      {/* Dialog with Autocomplete */}
       <Dialog 
         open={dialogOpen} 
-        onClose={handleCloseDialog}
+        onClose={handleCloseDialog} 
         fullWidth
         maxWidth={currentAction === "view" ? "lg" : "sm"}
       >
         <DialogTitle>
-          {currentAction === "view" ? "View Member Details" : "Perform Action"}
+          {currentAction === "Alerting"
+            ? "Select Products for Alerting"
+            : currentAction === "view"
+            ? "View Member Details"
+            : "Perform Action"}
         </DialogTitle>
         <DialogContent>
-          {currentAction === "view" ? (
+          {currentAction === "Alerting" ? (
+            <Autocomplete
+              multiple
+              limitTags={2}
+              id="multiple-limit-tags"
+              options={productOptions}
+              getOptionLabel={(option) => option.productName}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Products"
+                  placeholder="Select products"
+                />
+              )}
+              onChange={(event, value) =>
+                setSelectedProductIds(value.map((item) => item._id))
+              }
+              sx={{ marginTop: 2 }}
+            />
+          ) : currentAction === "view" ? (
             <ViewRequestedMember data={viewData} />
           ) : (
             <p>Other action content goes here.</p>
@@ -173,6 +226,11 @@ const RequestedMember = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Close</Button>
+          {currentAction === "Alerting" && (
+            <Button onClick={handleConfirm} variant="contained" color="primary">
+              Confirm
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>

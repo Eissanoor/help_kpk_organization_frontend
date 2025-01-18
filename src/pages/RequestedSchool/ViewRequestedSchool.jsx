@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
-
+import { API_BASE_URL } from "../../config/Config";
 const ViewRequestedSchool = ({ data }) => {
   // Create refs for CNIC inputs
   const fatherCnicRefs = Array(13).fill(0).map(() => useRef(null));
@@ -8,7 +8,6 @@ const ViewRequestedSchool = ({ data }) => {
   const guardianCnicRefs = Array(13).fill(0).map(() => useRef(null));
   const dobRefs = Array(8).fill(0).map(() => useRef(null));
   const admissionDateRefs = Array(8).fill(0).map(() => useRef(null));
-  const API_BASE_URL = "https://fundapi.pakardi.com";
 
   useEffect(() => {
     // Set father CNIC digits

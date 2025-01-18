@@ -1,13 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
-
+import { API_BASE_URL } from "../../config/Config";
 const ViewRequestedMember = ({ data }) => {
     console.log(data);
   // Create refs for CNIC inputs
   const cnicRefs = Array(13).fill(0).map(() => useRef(null));
   const fatherCnicRefs = Array(13).fill(0).map(() => useRef(null));
   const dobRefs = Array(8).fill(0).map(() => useRef(null));
-  const API_BASE_URL = "https://fundapi.pakardi.com";
 
   useEffect(() => {
     // Set CNIC digits into individual inputs

@@ -1,26 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "./context/SidebarContext";
-import Sidebar from "./components/Sidebar";
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import Dashboard from "./pages/Dashboard/Dashboard"
-import Product from "./pages/Product/Product";
-import Requested from "./pages/Requesteddisable/Requesteddisable";
-import RequestedMember from "./pages/RequestedMember/RequestedMember";
-import RequestedSchool from "./pages/RequestedSchool/RequestedSchool";
-import User from "./pages/Users/Users";
-import Completedrequest from "./pages/completedRequest/completedRequest";
-import Location from "./pages/Location/location";
-import CreateNewUser from "./pages/Users/CreateNewUser";
-import CreateNewProduct from "./pages/Product/CreateNewProduct";
-import UpdateProduct from "./pages/Product/updateProduct";
-import ViewProduct from "./pages/Product/ViewProduct"
-import ViewUser from "./pages/Users/viewUser";
-import UpdateUser from "./pages/Users/updateUser";
-import CreateNewLocation from "./pages/Location/CreateNewLocation";
-import ViewLocation from "./pages/Location/ViewLocation";
-import UpdateLocation from "./pages/Location/updateLocation";
+import { SidebarProvider } from "./Context/SidebarContext.jsx";
+import Sidebar from "./components/Sidebar.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Login from "./pages/Login/Login.jsx";
+import Register from "./pages/Register/Register.jsx";
+import Dashboard from "./pages/Dashboard/Dashboard.jsx"
+import Product from "./pages/Product/Product.jsx";
+import Requested from "./pages/Requesteddisable/Requesteddisable.jsx";
+import RequestedMember from "./pages/RequestedMember/RequestedMember.jsx";
+import RequestedSchool from "./pages/RequestedSchool/RequestedSchool.jsx";
+import User from "./pages/Users/Users.jsx";
+import Completedrequest from "./pages/completedRequest/completedRequest.jsx";
+import Location from "./pages/Location/location.jsx";
+import CreateNewUser from "./pages/Users/CreateNewUser.jsx";
+import CreateNewProduct from "./pages/Product/CreateNewProduct.jsx";
+import UpdateProduct from "./pages/Product/updateProduct.jsx";
+import ViewProduct from "./pages/Product/ViewProduct.jsx"
+import ViewUser from "./pages/Users/viewUser.jsx";
+import UpdateUser from "./pages/Users/updateUser.jsx";
+import CreateNewLocation from "./pages/Location/CreateNewLocation.jsx";
+import ViewLocation from "./pages/Location/ViewLocation.jsx";
+import UpdateLocation from "./pages/Location/updateLocation.jsx";
 function App() {
   return (
     <SidebarProvider>
@@ -61,6 +61,8 @@ function App() {
               }
             />
           </Routes>
+
+
         </div>
       </Router>
     </SidebarProvider>
