@@ -102,7 +102,7 @@ const Login = () => {
           <div className="lg:h-[400px] md:h-[300px] max-md:order-first">
             <img
               src={myLogo}
-              className="w-2/4 h-2/3 max-md:w-2/5 mx-auto block object-cover"
+              className="w-2/4 h-2/3 max-md:w-2/5 mx-auto block object-contain"
               alt="Login Illustration"
             />
           </div>
