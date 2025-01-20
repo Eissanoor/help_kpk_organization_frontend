@@ -110,7 +110,8 @@ useEffect(() => {
             body: JSON.stringify({ productIds: selectedProductIds }),
           }
         );
-        console.log("Response status:", response.status);
+       
+        
         const result = await response.json();
         console.log("Update response:", result);
       } catch (error) {
