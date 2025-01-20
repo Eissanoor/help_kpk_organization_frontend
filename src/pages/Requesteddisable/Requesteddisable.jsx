@@ -24,9 +24,10 @@ const Requested = () => {
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [currentAction, setCurrentAction] = useState("");
   const [viewData, setViewData] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Fetch rows for the table
-  useEffect(() => {
+  
     const fetchRows = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/disable/get-all-disable`);
@@ -36,9 +37,11 @@ const Requested = () => {
         console.error("Error fetching rows:", error);
       }
     };
-
+useEffect(() => {
     fetchRows();
   }, []);
+    
+  
 
   // Fetch product options for Autocomplete
   const fetchProductOptions = async () => {
@@ -119,6 +122,32 @@ const Requested = () => {
     console.log("Dialog closed after confirm.");
   };
 
+  const handleOpenDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  // Function to handle deletion
+  const handleDeleteConfirm = async () => {
+    if (selectedRow) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/disable/delete-disable/${selectedRow._id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        console.log("Delete response status:", response.status);
+        if (response.ok) {
+          // Re-fetch rows after successful deletion
+          fetchRows();
+        }
+      } catch (error) {
+        console.error("Error deleting row:", error);
+      }
+    }
+    setDeleteDialogOpen(false);
+  };
+
   const columns = [
     { field: "childName", headerName: "Name", width: 250 },
     { field: "status", headerName: "Status", width: 150 },
@@ -177,7 +206,7 @@ const Requested = () => {
       >
         <MenuItem onClick={() => handleOpenDialog("view")}>View</MenuItem>
         <MenuItem onClick={() => handleOpenDialog("Alerting")}>Alerting</MenuItem>
-        <MenuItem onClick={() => handleOpenDialog("delete")}>Delete</MenuItem>
+        <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
       </Menu>
 
       {/* Dialog with Autocomplete */}
@@ -227,6 +256,25 @@ const Requested = () => {
               Confirm
             </Button>
           )}
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog 
+        open={deleteDialogOpen} 
+        onClose={() => setDeleteDialogOpen(false)} 
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <p>Do you really want to delete this item?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
+          <Button onClick={handleDeleteConfirm} variant="contained" color="primary">
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </>

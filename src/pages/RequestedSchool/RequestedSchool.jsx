@@ -25,6 +25,7 @@ const RequestedSchool = () => {
   const [viewData, setViewData] = useState(null);
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -124,6 +125,30 @@ const RequestedSchool = () => {
     console.log("Dialog closed after confirm.");
   };
 
+  const handleOpenDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+    handleCloseMenu();
+  };
+
+  const handleDeleteSchool = async () => {
+    console.log("Delete function called");
+    if (selectedRow) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/school/delete-school/${selectedRow.id}`, {
+          method: "DELETE",
+        });
+        const result = await response.json();
+        console.log("Delete response:", result);
+        if (result.success) {
+          fetchData(); // Re-fetch data after successful deletion
+        }
+      } catch (error) {
+        console.error("Error deleting school:", error);
+      }
+    }
+    setDeleteDialogOpen(false);
+  };
+
   const columns = [
     {
       field: 'action', headerName: 'Action', width: 120,
@@ -183,7 +208,7 @@ const RequestedSchool = () => {
       >
         <MenuItem onClick={() => handleOpenDialog('view')}>View</MenuItem>
         <MenuItem onClick={() => handleOpenDialog('Alerting')}>Alerting</MenuItem>
-        <MenuItem onClick={() => handleOpenDialog('delete')}>Delete</MenuItem>
+        <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
       </Menu>
 
       {/* Dialog with Autocomplete for Alerting */}
@@ -233,6 +258,22 @@ const RequestedSchool = () => {
               Confirm
             </Button>
           )}
+        </DialogActions>
+      </Dialog>
+
+      <Dialog 
+        open={deleteDialogOpen} 
+        onClose={() => setDeleteDialogOpen(false)} 
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <p>Do you really want to delete this school?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
+          <Button onClick={handleDeleteSchool} variant="contained" color="secondary">Yes</Button>
         </DialogActions>
       </Dialog>
     </>

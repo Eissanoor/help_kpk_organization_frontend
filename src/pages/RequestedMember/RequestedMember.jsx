@@ -25,10 +25,11 @@ const RequestedMember = () => {
   const [completeData, setCompleteData] = useState({});
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   console.log("rows",rows);
 
-  useEffect(() => {
+  
     const fetchMembers = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/member/getmember`);
@@ -56,6 +57,7 @@ const RequestedMember = () => {
       }
     };
 
+  useEffect(() => {
     fetchMembers();
   }, []);
 
@@ -142,6 +144,29 @@ const RequestedMember = () => {
     console.log("Dialog closed after confirm.");
   };
 
+  const handleOpenDeleteDialog = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteMember = async () => {
+    if (selectedRow) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/member/delete-member/${selectedRow.id}`, {
+          method: "DELETE",
+        });
+        const result = await response.json();
+        console.log("Delete response:", result);
+        if (result.success) {
+          // Re-fetch members after successful deletion
+          fetchMembers();
+        }
+      } catch (error) {
+        console.error("Error deleting member:", error);
+      }
+    }
+    setDeleteDialogOpen(false);
+  };
+
   return (
     <>
       <section className="flex flex-col justify-center px-4 py-10 mx-auto sm:px-6 sm:py-4 sm:ml-[250px]">
@@ -181,7 +206,7 @@ const RequestedMember = () => {
       >
         <MenuItem onClick={() => handleOpenDialog('view')}>View</MenuItem>
         <MenuItem onClick={() => handleOpenDialog('Alerting')}>Alerting</MenuItem>
-        <MenuItem onClick={() => handleOpenDialog('delete')}>Delete</MenuItem>
+        <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
       </Menu>
 
       {/* Dialog with Autocomplete */}
@@ -231,6 +256,22 @@ const RequestedMember = () => {
               Confirm
             </Button>
           )}
+        </DialogActions>
+      </Dialog>
+
+      <Dialog 
+        open={deleteDialogOpen} 
+        onClose={() => setDeleteDialogOpen(false)} 
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <p>Do you really want to delete this member?</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>No</Button>
+          <Button onClick={handleDeleteMember} variant="contained" color="primary">Yes</Button>
         </DialogActions>
       </Dialog>
     </>
