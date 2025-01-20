@@ -85,10 +85,10 @@ const Completedrequest = () => {
   ];
 
   const memberColumns = [
-    { field: 'childName', headerName: 'Child Name', width: 150 },
-    { field: 'relation', headerName: 'Relation', width: 150 },
-    { field: 'cnicNo', headerName: 'CNIC No', width: 150 },
-    { field: 'profession', headerName: 'Profession', width: 150 },
+    { field: 'childName', headerName: 'Child Name', width: 200 },
+    { field: 'relation', headerName: 'Relation', width: 200 },
+    { field: 'cnicNo', headerName: 'CNIC No', width: 200 },
+    { field: 'profession', headerName: 'Profession', width: 300 },
     { 
       field: 'action', 
       headerName: 'Action', 
@@ -103,14 +103,14 @@ const Completedrequest = () => {
   ];
 
   const schoolColumns = [
-    { field: 'childName', headerName: 'Child Name', width: 150 },
-    { field: 'fatherName', headerName: 'Father Name', width: 150 },
+    { field: 'childName', headerName: 'Child Name', width: 200 },
+    { field: 'fatherName', headerName: 'Father Name', width:  200 },
     { field: 'schoolAdmittedIn', headerName: 'School Admitted In', width: 200 },
-    { field: 'DateOfAdmission', headerName: 'Date of Admission', width: 150 },
+    { field: 'DateOfAdmission', headerName: 'Date of Admission', width: 200 },
     { 
       field: 'action', 
       headerName: 'Action', 
-      width: 150, 
+      width: 200, 
       renderCell: (params) => (
         <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(params.row._id, 'school')}>
           Delete
