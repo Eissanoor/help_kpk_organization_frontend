@@ -8,30 +8,34 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
 const Location = () => {
   const navigate = useNavigate(); // Use the navigate hook
   const [products, setProducts] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [locationToDelete, setLocationToDelete] = useState(null);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/location/get-all-location`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (data.success) {
+        setProducts(data.data);
+      } else {
+        console.error("Failed to fetch products:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/location/get-all-location`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (data.success) {
-          setProducts(data.data);
-        } else {
-          console.error("Failed to fetch products:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
     fetchProducts();
   }, []);
 
@@ -61,10 +65,31 @@ const Location = () => {
     handleClose();
   };
 
-  const handleDelete = () => {
-    console.log('Delete product:', selectedProduct);
-    handleClose();
+  const handleDelete = (product) => {
+    setLocationToDelete(product);
+    setOpenDialog(true);
   };
+
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/location/delete-location/${locationToDelete._id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+      }
+      fetchProducts();
+    } catch (error) {
+      console.error("Error deleting location:", error);
+    }
+    setOpenDialog(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setLocationToDelete(null);
+  };
+
   const columns = [
     { field: 'locationName', headerName: 'Location Name', width: 500 },
     {
@@ -114,8 +139,20 @@ const Location = () => {
       >
         <MenuItem onClick={handleView}>View</MenuItem>
         <MenuItem onClick={handleUpdate}>Update</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={() => handleDelete(selectedProduct)}>Delete</MenuItem>
       </Menu>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this location?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">No</Button>
+          <Button onClick={confirmDelete} color="primary">Yes</Button>
+        </DialogActions>
+      </Dialog>
     </section>
    
     </>

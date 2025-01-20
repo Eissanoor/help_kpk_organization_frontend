@@ -8,30 +8,38 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useNavigate } from "react-router-dom";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 const Product = () => {
   const navigate = useNavigate(); // Use the navigate hook
   const [products, setProducts] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false); // New state for dialog
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/product/getallproduct`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+      }
+      const data = await response.json();
+      if (data.success) {
+        setProducts(data.data);
+      } else {
+        console.error("Failed to fetch products:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/product/getallproduct`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (data.success) {
-          setProducts(data.data);
-        } else {
-          console.error("Failed to fetch products:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
     fetchProducts();
   }, []);
 
@@ -61,10 +69,32 @@ const Product = () => {
     handleClose();
   };
 
-  const handleDelete = () => {
-    console.log('Delete product:', selectedProduct);
+  const handleDelete = async () => {
+    if (selectedProduct) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/product/productdelete/${selectedProduct._id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log('Product deleted:', selectedProduct);
+        await fetchProducts();
+      } catch (error) {
+        console.error("Error deleting product:", error);
+      }
+    }
     handleClose();
   };
+
+  const openDeleteDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setOpenDialog(false);
+  };
+
   const columns = [
     { field: 'image', headerName: 'Image', width: 200, renderCell: (params) => (
       <img 
@@ -122,8 +152,32 @@ const Product = () => {
       >
         <MenuItem onClick={handleView}>View</MenuItem>
         <MenuItem onClick={handleUpdate}>Update</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={openDeleteDialog}>Delete</MenuItem>
       </Menu>
+
+      {/* Confirmation Dialog */}
+      <Dialog 
+        open={openDialog} 
+        onClose={closeDeleteDialog} 
+        sx={{ 
+          '& .MuiDialog-paper': { 
+            padding: '20px', 
+            borderRadius: '10px', 
+            backgroundColor: '#f5f5f5' 
+          } 
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 'bold', color: '#333' }}>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ color: '#555' }}>
+            Are you sure you want to delete this product?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="primary" variant="outlined">No</Button>
+          <Button onClick={() => { handleDelete(); closeDeleteDialog(); }} color="secondary" variant="contained">Yes</Button>
+        </DialogActions>
+      </Dialog>
     </section>
    
     </>
