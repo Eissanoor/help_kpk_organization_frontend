@@ -18,6 +18,7 @@ const RequestedSchool = () => {
   const [open, setOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
+  console.log("selectedRow", selectedRow);
   const [anchorEl, setAnchorEl] = useState(null);
   const [rows, setRows] = useState([]);
   const [completeData, setCompleteData] = useState({});
@@ -61,6 +62,10 @@ const RequestedSchool = () => {
   }, []);
 
   const handleMenuClick = (event, row) => {
+    console.log("Row clicked:", row);
+    if (!row) {
+        console.error("No row data available!");
+    }
     setAnchorEl(event.currentTarget);
     setSelectedRow(row);
   };
@@ -81,6 +86,8 @@ const RequestedSchool = () => {
   };
 
   const handleOpenDialog = (action) => {
+    console.log("Current action:", action);
+    console.log("Selected row for action:", selectedRow);
     setCurrentAction(action);
     setDialogOpen(true);
     
@@ -126,46 +133,61 @@ const RequestedSchool = () => {
   };
 
   const handleOpenDeleteDialog = () => {
-    setDeleteDialogOpen(true);
-    handleCloseMenu();
+    console.log("Attempting to open delete dialog.");
+    if (selectedRow) {
+        setDeleteDialogOpen(true);
+    } else {
+        console.error("No row selected for deletion!");
+    }
   };
 
   const handleDeleteSchool = async () => {
     console.log("Delete function called");
+    console.log("Selected row:", selectedRow);
     if (selectedRow) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/school/delete-school/${selectedRow.id}`, {
-          method: "DELETE",
-        });
-        const result = await response.json();
-        console.log("Delete response:", result);
-        if (result.success) {
-          fetchData(); // Re-fetch data after successful deletion
+        try {
+            const response = await fetch(`${API_BASE_URL}/school/delete-school/${selectedRow.id}`, {
+                method: "DELETE",
+            });
+            console.log("Response status:", response.status);
+            const result = await response.json();
+            console.log("Delete response:", result);
+            if (result.success) {
+                fetchData();
+                setSelectedRow(null);
+            } else {
+                console.error("Delete failed:", result.message);
+            }
+        } catch (error) {
+            console.error("Error deleting school:", error);
         }
-      } catch (error) {
-        console.error("Error deleting school:", error);
-      }
+    } else {
+        console.error("No selected row to delete.");
     }
     setDeleteDialogOpen(false);
   };
 
   const columns = [
-    {
-      field: 'action', headerName: 'Action', width: 120,
-      renderCell: (params) => (
-        <div>
-          <button onClick={(event) => handleMenuClick(event, params.row)}>
-            <MoreHorizIcon />
-          </button>
-        </div>
-      ),
-    },
+    
     { field: 'childName', headerName: 'Child Name', width: 200 },
     { field: 'fatherName', headerName: 'Father Name', width: 200 },
     { field: 'motherName', headerName: 'Mother Name', width: 200 },
     { field: 'position', headerName: 'Position', width: 100 },
     { field: 'bloodGroup', headerName: 'Blood Group', width: 140 },
     { field: 'fatherCnic', headerName: 'Father CNIC', width: 180 },
+    {
+      field: 'action', headerName: 'Action', width: 120,
+      renderCell: (params) => (
+        <div>
+          <button onClick={(event) => {
+            console.log("Button clicked for row:", params.row);
+            handleMenuClick(event, params.row);
+          }}>
+            <MoreHorizIcon />
+          </button>
+        </div>
+      ),
+    },
   ];
 
   return (
