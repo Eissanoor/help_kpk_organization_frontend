@@ -21,6 +21,7 @@ import UpdateUser from "./pages/Users/updateUser.jsx";
 import CreateNewLocation from "./pages/Location/CreateNewLocation.jsx";
 import ViewLocation from "./pages/Location/ViewLocation.jsx";
 import UpdateLocation from "./pages/Location/updateLocation.jsx";
+import Profile from "./pages/profile/profile.jsx";
 function App() {
   return (
     <SidebarProvider>
@@ -54,6 +55,7 @@ function App() {
                       <Route path="/view-location" element={<ViewLocation />} />
                       <Route path="/update-location" element={<UpdateLocation />} />
                       <Route path="/create-new-location" element={<CreateNewLocation />} />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="*" element={<div className="text-center mt-10 text-2xl">404 - Page Not Found</div>} />
                     </Routes>
                   </div>
