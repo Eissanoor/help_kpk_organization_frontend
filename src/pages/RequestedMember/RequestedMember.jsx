@@ -74,7 +74,7 @@ const RequestedMember = () => {
   }, [currentPage]);
 
   const columns = [
-    { field: 'childName', headerName: 'Child Name', width: 200 },
+    { field: 'childName', headerName: 'Name', width: 200 },
     { field: 'contactNumber', headerName: 'Contact Number', width: 200 },
     { field: 'cnicNo', headerName: 'cnic No', width: 150 },
     { field: 'bloodGroup', headerName: 'Blood Group', width: 150 },
