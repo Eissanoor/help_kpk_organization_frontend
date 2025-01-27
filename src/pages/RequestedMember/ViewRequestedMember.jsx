@@ -720,11 +720,11 @@ const ViewRequestedMember = ({ data }) => {
                   {data?.cnicFrontPic && (
                     <div className="w-full">
                       <label className="block mb-2">CNIC Front Image</label>
-                      <div className="border-2 border-dashed border-gray-400 h-48">
+                      <div className="border-2 border-dashed border-gray-400 h-48 overflow-hidden">
                         <img 
                           src={`${API_BASE_URL}/${data.cnicFrontPic}`}
                           alt="CNIC Front"
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain cursor-pointer transition-transform duration-300 hover:scale-[2.5]"
                         />
                       </div>
                     </div>
@@ -733,11 +733,11 @@ const ViewRequestedMember = ({ data }) => {
                   {data?.cnicBackPic && (
                     <div className="w-full">
                       <label className="block mb-2">CNIC Back Image</label>
-                      <div className="border-2 border-dashed border-gray-400 h-48">
+                      <div className="border-2 border-dashed border-gray-400 h-48 overflow-hidden">
                         <img 
                           src={`${API_BASE_URL}/${data.cnicBackPic}`}
                           alt="CNIC Back"
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-contain cursor-pointer transition-transform duration-300 hover:scale-[2.5]"
                         />
                       </div>
                     </div>
