@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import ViewRequestedMember from './ViewRequestedMember';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Typography from '@mui/material/Typography';
 
 const RequestedMember = () => {
   const [open, setOpen] = useState(false);
@@ -26,23 +27,27 @@ const RequestedMember = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   console.log("rows",rows);
 
   
-    const fetchMembers = async () => {
+    const fetchMembers = async (page = 1) => {
       try {
-        const response = await fetch(`${API_BASE_URL}/member/getmember`);
+        const response = await fetch(`${API_BASE_URL}/member/getmember?page=${page}&limit=${pageSize}`);
         const result = await response.json();
         console.log("result", result);
         if (result.success) {
-          const fullData = result.data.reduce((acc, member) => {
+          setTotalRecords(result.data.totalRecords);
+          const fullData = result.data.members.reduce((acc, member) => {
             acc[member._id] = member;
             return acc;
           }, {});
           setCompleteData(fullData);
 
-          const formattedRows = result.data.map(member => ({
+          const formattedRows = result.data.members.map(member => ({
             id: member._id,
             childName: member.childName,
             contactNumber: member.contactNumber,
@@ -58,8 +63,8 @@ const RequestedMember = () => {
     };
 
   useEffect(() => {
-    fetchMembers();
-  }, []);
+    fetchMembers(currentPage);
+  }, [currentPage]);
 
   const columns = [
     { field: 'childName', headerName: 'Child Name', width: 200 },
@@ -167,6 +172,10 @@ const RequestedMember = () => {
     setDeleteDialogOpen(false);
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <>
       <section className="flex flex-col justify-center px-4 py-10 mx-auto sm:px-6 sm:py-4 sm:ml-[250px]">
@@ -179,8 +188,7 @@ const RequestedMember = () => {
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+           
             checkboxSelection
             sx={{
               '& .MuiDataGrid-columnHeader': {
@@ -195,6 +203,31 @@ const RequestedMember = () => {
               },
             }}
           />
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="pagination-controls" style={{ display: 'flex', alignItems: 'center', marginTop: '16px', justifyContent: 'end' }}>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => handlePageChange(currentPage - 1)} 
+            disabled={currentPage === 1}
+            style={{ marginRight: '8px' }}
+          >
+            Previous
+          </Button>
+          <Typography variant="body1" style={{ margin: '0 8px' }}>
+            Page {currentPage} of {Math.ceil(totalRecords / pageSize)}
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => handlePageChange(currentPage + 1)} 
+            disabled={currentPage === Math.ceil(totalRecords / pageSize)}
+            style={{ marginLeft: '8px' }}
+          >
+            Next
+          </Button>
         </div>
       </section>
 
