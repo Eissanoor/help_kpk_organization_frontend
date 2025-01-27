@@ -13,6 +13,9 @@ import Button from '@mui/material/Button';
 import ViewRequestedSchool from './ViewRequestedSchool';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Spinner from '../../components/spinner';
 
 const RequestedSchool = () => {
   const [open, setOpen] = useState(false);
@@ -27,20 +30,26 @@ const RequestedSchool = () => {
   const [productOptions, setProductOptions] = useState([]);
   const [selectedProductIds, setSelectedProductIds] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async (page = 1) => {
+    setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/school/getallschool`);
+      const response = await fetch(`${API_BASE_URL}/school/getallschool?page=${page}&limit=${pageSize}`);
       const result = await response.json();
-      if (result.success) {
-        const fullData = result.data.reduce((acc, school) => {
+      if (result.success && Array.isArray(result.data.schools)) {
+        setTotalRecords(result.data.totalSchools);
+        const fullData = result.data.schools.reduce((acc, school) => {
           acc[school._id] = school;
           return acc;
         }, {});
         setCompleteData(fullData);
         console.log("fullData", fullData);
 
-        const formattedRows = result.data.map(item => ({
+        const formattedRows = result.data.schools.map(item => ({
           id: item._id,
           childName: item.childName,
           fatherName: item.fatherName,
@@ -51,15 +60,19 @@ const RequestedSchool = () => {
         }));
         setRows(formattedRows);
         console.log("formattedRows", formattedRows);
+      } else {
+        console.error("Unexpected data format:", result.data);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
     }
   };
   
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const handleMenuClick = (event, row) => {
     console.log("Row clicked:", row);
@@ -192,6 +205,11 @@ const RequestedSchool = () => {
 
   return (
     <>
+      {loading && (
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+          <Spinner />
+        </div>
+      )}
       <Sidebar/>
       <section className="flex flex-col justify-center px-4 py-10 mx-auto sm:px-6 sm:py-4 sm:ml-[250px]">
         <div className="flex flex-wrap items-center justify-between mb-10">
@@ -219,6 +237,29 @@ const RequestedSchool = () => {
               },
             }}
           />
+        </div>
+        <div className="pagination-controls" style={{ display: 'flex', alignItems: 'center', marginTop: '16px', justifyContent: 'end' }}>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => setCurrentPage(currentPage - 1)} 
+            disabled={currentPage === 1}
+            style={{ marginRight: '8px' }}
+          >
+            Previous
+          </Button>
+          <Typography variant="body1" style={{ margin: '0 8px' }}>
+            Page {currentPage} of {Math.ceil(totalRecords / pageSize)} ({totalRecords} total records)
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={() => setCurrentPage(currentPage + 1)} 
+            disabled={currentPage === Math.ceil(totalRecords / pageSize)}
+            style={{ marginLeft: '8px' }}
+          >
+            Next
+          </Button>
         </div>
       </section>
 

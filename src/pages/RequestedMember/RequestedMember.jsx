@@ -14,7 +14,8 @@ import ViewRequestedMember from './ViewRequestedMember';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Typography from '@mui/material/Typography';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Spinner from '../../components/spinner';
 const RequestedMember = () => {
   const [open, setOpen] = useState(false);
   const [currentAction, setCurrentAction] = useState('');
@@ -30,16 +31,18 @@ const RequestedMember = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(false);
 
   console.log("rows",rows);
 
   
     const fetchMembers = async (page = 1) => {
+      setLoading(true);
       try {
         const response = await fetch(`${API_BASE_URL}/member/getmember?page=${page}&limit=${pageSize}`);
         const result = await response.json();
         console.log("result", result);
-        if (result.success) {
+        if (result.success && result.data && result.data.members) {
           setTotalRecords(result.data.totalRecords);
           const fullData = result.data.members.reduce((acc, member) => {
             acc[member._id] = member;
@@ -56,9 +59,13 @@ const RequestedMember = () => {
             bloodGroup: member.bloodGroup,
           }));
           setRows(formattedRows);
+        } else {
+          console.error("Unexpected response structure:", result);
         }
       } catch (error) {
         console.error('Error fetching members:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -95,12 +102,18 @@ const RequestedMember = () => {
   };
 
   const fetchProductOptions = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/product/getallproduct`);
       const data = await response.json();
       setProductOptions(data.data);
     } catch (error) {
       console.error("Error fetching product options:", error);
+    } finally {
+      setLoading(false);
+      if (loading) {
+        return <Spinner />;
+      }
     }
   };
 
@@ -174,10 +187,17 @@ const RequestedMember = () => {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+    setLoading(true);
+    fetchMembers(newPage);
   };
 
   return (
     <>
+      {loading && (
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+          <Spinner />
+        </div>
+      )}
       <section className="flex flex-col justify-center px-4 py-10 mx-auto sm:px-6 sm:py-4 sm:ml-[250px]">
         <div className="flex flex-wrap items-center justify-between mb-10">
           <h2 className="mr-5 text-4xl font-bold leading-none md:text-5xl">
@@ -217,7 +237,7 @@ const RequestedMember = () => {
             Previous
           </Button>
           <Typography variant="body1" style={{ margin: '0 8px' }}>
-            Page {currentPage} of {Math.ceil(totalRecords / pageSize)}
+            Page {currentPage} of {Math.ceil(pageSize)} ({totalRecords} total records)
           </Typography>
           <Button 
             variant="contained" 
