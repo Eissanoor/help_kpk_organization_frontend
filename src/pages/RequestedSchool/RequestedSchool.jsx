@@ -57,6 +57,7 @@ const RequestedSchool = () => {
           position: item.position,
           bloodGroup: item.bloodGroup,
           fatherCnic: item.fatherCnic,
+          userId: item.userId
         }));
         setRows(formattedRows);
         console.log("formattedRows", formattedRows);
@@ -188,6 +189,12 @@ const RequestedSchool = () => {
     { field: 'position', headerName: 'Position', width: 100 },
     { field: 'bloodGroup', headerName: 'Blood Group', width: 140 },
     { field: 'fatherCnic', headerName: 'Father CNIC', width: 180 },
+    { 
+      field: "user", 
+      headerName: "User", 
+      width: 150, 
+      renderCell: (params) => params.row.userId ? params.row.userId.username : 'N/A'
+    },
     {
       field: 'action', headerName: 'Action', width: 120,
       renderCell: (params) => (

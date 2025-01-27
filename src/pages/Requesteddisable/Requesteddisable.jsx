@@ -171,6 +171,12 @@ const Requested = () => {
     { field: "phoneNo", headerName: "Phone No", width: 200 },
     { field: "registrationNo", headerName: "Registration No", width: 200 },
     { field: "submittionDate", headerName: "Submission Date", width: 200 },
+    { 
+      field: "user", 
+      headerName: "User", 
+      width: 150, 
+      renderCell: (params) => params.row.userId ? params.row.userId.username : 'N/A'
+    },
     {
       field: "actions",
       headerName: "Actions",

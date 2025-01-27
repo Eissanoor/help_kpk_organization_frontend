@@ -54,9 +54,9 @@ const RequestedMember = () => {
             id: member._id,
             childName: member.childName,
             contactNumber: member.contactNumber,
-            noOfChildren: member.noOfChildren,
-            noOfDependents: member.noOfDependents,
+            cnicNo: member.cnicNo,
             bloodGroup: member.bloodGroup,
+            userId: member.userId,
           }));
           setRows(formattedRows);
         } else {
@@ -76,9 +76,17 @@ const RequestedMember = () => {
   const columns = [
     { field: 'childName', headerName: 'Child Name', width: 200 },
     { field: 'contactNumber', headerName: 'Contact Number', width: 200 },
-    { field: 'noOfChildren', headerName: 'No. of Children', width: 200 },
-    { field: 'noOfDependents', headerName: 'No. of Dependents', width: 200 },
-    { field: 'bloodGroup', headerName: 'Blood Group', width: 200 },
+    { field: 'cnicNo', headerName: 'cnic No', width: 150 },
+    { field: 'bloodGroup', headerName: 'Blood Group', width: 150 },
+    { 
+      field: "user", 
+      headerName: "User", 
+      width: 150, 
+      renderCell: (params) => {
+        console.log(params.row);
+        return params.row.userId ? params.row.userId.username : 'N/A';
+      }
+    },
     {
       field: 'action', headerName: 'Action', width: 150,
       renderCell: (params) => (
