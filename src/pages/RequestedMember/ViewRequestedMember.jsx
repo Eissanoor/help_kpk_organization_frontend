@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
+import logo2 from "../../assets/logo2.png";
 import { API_BASE_URL } from "../../config/Config";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 const ViewRequestedMember = ({ data }) => {
     console.log(data);
@@ -91,35 +91,211 @@ const ViewRequestedMember = ({ data }) => {
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  const printDocument = () => {
-    const input = document.getElementById("form-to-print");
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const doc = new jsPDF({
+  const printDocument = async () => {
+    try {
+      // Create PDF with A4 dimensions
+      const pdf = new jsPDF({
         orientation: "portrait",
-        unit: "px",
-        format: [canvas.width, canvas.height],
-        putOnlyUsedFonts: true,
-        floatPrecision: 16
+        unit: "pt",
+        format: "a4"
       });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 40;
+      const lineHeight = 25;
+      let yPos = margin;
+
+      // Add watermark
+      const watermarkSize = 400;
+      const watermarkX = (pageWidth - watermarkSize) / 2;
+      const watermarkY = (pageHeight - watermarkSize) / 2;
       
-      // Add the form image to the PDF
-      doc.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+      // Add watermark with reduced opacity
+      pdf.saveGraphicsState();
+      pdf.setGState(new pdf.GState({ opacity: 0.1 }));
+      pdf.addImage(logo, 'PNG', watermarkX, watermarkY, watermarkSize, watermarkSize);
+      pdf.restoreGraphicsState();
 
-      // Add CNIC images if they exist
-      if (data?.cnicFrontPic) {
-        const cnicFrontImg = `${API_BASE_URL}/${data.cnicFrontPic}`;
-        doc.addImage(cnicFrontImg, "PNG", 10, canvas.height + 10, 100, 100);
+      // Add header background (green rectangle)
+      pdf.setFillColor(0, 79, 37); // #004F25 in RGB
+      pdf.rect(margin, yPos, pageWidth - (2 * margin), 100, 'F');
+
+      // Add white rectangles for logos
+      pdf.setFillColor(255, 255, 255);
+      pdf.rect(margin + 10, yPos + 20, 60, 60, 'F');
+      pdf.rect(pageWidth - margin - 70, yPos + 20, 60, 60, 'F');
+
+      // Add logos
+      const logoWidth = 60;
+      const logoHeight = 60;
+      
+      // Left logo
+      const leftLogo = new Image();
+      leftLogo.src = logo;
+      await new Promise((resolve) => {
+        leftLogo.onload = resolve;
+      });
+      pdf.addImage(leftLogo, 'PNG', margin + 10, yPos + 20, logoWidth, logoHeight);
+
+      // Right logo
+      const rightLogo = new Image();
+      rightLogo.src = logo2;
+      await new Promise((resolve) => {
+        rightLogo.onload = resolve;
+      });
+      pdf.addImage(rightLogo, 'PNG', pageWidth - margin - logoWidth - 10, yPos + 20, logoWidth, logoHeight);
+
+      // Add white text for header
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont("helvetica", "bold");
+      
+      // Title
+      pdf.setFontSize(20);
+      pdf.text("HELP SYSTEM", pageWidth/2, yPos + 30, { align: "center" });
+      
+      // Subtitle
+      pdf.setFontSize(16);
+      pdf.text("KHYBER PUKHTUNKHWA", pageWidth/2, yPos + 50, { align: "center" });
+      
+      // Organization details
+      pdf.setFontSize(12);
+      pdf.text("Voluntary Social Welfare Organization", pageWidth/2, yPos + 70, { align: "center" });
+      pdf.text("Health Education Livelihood & Peace for All", pageWidth/2, yPos + 85, { align: "center" });
+
+      // Reset text color and move yPos past header
+      pdf.setTextColor(0, 0, 0);
+      yPos += 120;
+
+      // Rest of the form content
+      // Helper function to add field with underline
+      const addField = (label, value, x, y, width) => {
+        pdf.text(label, x, y);
+        const labelWidth = pdf.getTextWidth(label);
+        const fieldStart = x + labelWidth + 5;
+        const fieldWidth = width - labelWidth - 10;
+        
+        // Convert value to string and handle empty/null values
+        const stringValue = value ? String(value) : "";
+        
+        // Add value or underline if empty
+        if (stringValue) {
+          pdf.text(stringValue, fieldStart, y);
+        }
+        
+        // Add underline
+        pdf.line(fieldStart, y + 2, x + width, y + 2);
+      };
+
+      // Calculate column widths
+      const colWidth = (pageWidth - (2 * margin) - 20) / 2;
+      const col2X = margin + colWidth + 20;
+
+      // Personal Information
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Personal Information", margin, yPos);
+      pdf.setFont("helvetica", "normal");
+      yPos += lineHeight;
+
+      // Two columns layout
+      addField("Full Name:", formData.childName, margin, yPos, colWidth);
+      addField("Father/Husband:", "", col2X, yPos, colWidth);
+      yPos += lineHeight;
+
+      addField("CNIC No:", formData.cnicNo, margin, yPos, colWidth);
+      addField("Date of Birth:", formData.dateOfBirth, col2X, yPos, colWidth);
+      yPos += lineHeight;
+
+      addField("Gender:", formData.gender, margin, yPos, colWidth);
+      addField("Marital Status:", formData.maritalStatus, col2X, yPos, colWidth);
+      yPos += lineHeight;
+
+      addField("Religion:", formData.religion, margin, yPos, colWidth);
+      addField("Blood Group:", formData.bloodGroup, col2X, yPos, colWidth);
+      yPos += lineHeight * 2;
+
+      // Contact Information
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Contact Information", margin, yPos);
+      pdf.setFont("helvetica", "normal");
+      yPos += lineHeight;
+
+      addField("Contact Number:", formData.contactNumber, margin, yPos, colWidth);
+      addField("Alternative Contact:", formData.contactNumber2, col2X, yPos, colWidth);
+      yPos += lineHeight;
+
+      // Addresses need full width
+      pdf.text("Current Address:", margin, yPos);
+      yPos += lineHeight;
+      pdf.text(formData.currentAddress || "____________________", margin + 20, yPos);
+      pdf.line(margin + 20, yPos + 2, pageWidth - margin, yPos + 2);
+      yPos += lineHeight;
+
+      pdf.text("Permanent Address:", margin, yPos);
+      yPos += lineHeight;
+      pdf.text(formData.permanentAddress || "____________________", margin + 20, yPos);
+      pdf.line(margin + 20, yPos + 2, pageWidth - margin, yPos + 2);
+      yPos += lineHeight * 2;
+
+      // Family Information
+      pdf.setFont("helvetica", "bold");
+      pdf.text("Family Information", margin, yPos);
+      pdf.setFont("helvetica", "normal");
+      yPos += lineHeight;
+
+      addField("Total Children:", String(formData.noOfChildren || ""), margin, yPos, colWidth);
+      addField("Children in School:", String(formData.noOfChildrenInSchool || ""), col2X, yPos, colWidth);
+      yPos += lineHeight;
+
+      addField("Male Children:", String(formData.noOfChildrenMale || ""), margin, yPos, colWidth);
+      addField("Female Children:", String(formData.noOfChildrenFemale || ""), col2X, yPos, colWidth);
+      yPos += lineHeight * 2;
+
+      // Add CNIC Images if available
+      if (data?.cnicFrontPic || data?.cnicBackPic) {
+        pdf.setFont("helvetica", "bold");
+        pdf.text("CNIC Images", margin, yPos);
+        pdf.setFont("helvetica", "normal");
+        yPos += lineHeight;
+
+        const imageWidth = (pageWidth - (2 * margin) - 20) / 2;
+        const imageHeight = 150;
+
+        if (data?.cnicFrontPic) {
+          const frontImg = new Image();
+          frontImg.src = `${API_BASE_URL}/${data.cnicFrontPic}`;
+          await new Promise((resolve) => {
+            frontImg.onload = resolve;
+          });
+          pdf.addImage(frontImg, 'JPEG', margin, yPos, imageWidth, imageHeight, 'front', 'MEDIUM');
+        }
+
+        if (data?.cnicBackPic) {
+          const backImg = new Image();
+          backImg.src = `${API_BASE_URL}/${data.cnicBackPic}`;
+          await new Promise((resolve) => {
+            backImg.onload = resolve;
+          });
+          pdf.addImage(backImg, 'JPEG', col2X, yPos, imageWidth, imageHeight, 'back', 'MEDIUM');
+        }
       }
 
-      if (data?.cnicBackPic) {
-        const cnicBackImg = `${API_BASE_URL}/${data.cnicBackPic}`;
-        doc.addImage(cnicBackImg, "PNG", 10, canvas.height + 120, 100, 100);
-      }
+      // Add footer
+      const footerY = pdf.internal.pageSize.getHeight() - margin;
+      pdf.setFontSize(10);
+      pdf.text("Generated on: " + new Date().toLocaleDateString(), margin, footerY);
 
-      doc.save("requested_member_details.pdf");
-    });
+      pdf.save("member_details.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Please try again.");
+    }
   };
+
+  const [zoomLevels, setZoomLevels] = useState({
+    front: 1,
+    back: 1
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -167,7 +343,7 @@ const ViewRequestedMember = ({ data }) => {
                     {/* Right QR code */}
                     <div className="w-24 md:w-32 h-20 md:h-24 bg-white p-2 rounded-lg mt-2 md:mt-0">
                       <img
-                        src={logo}
+                        src={logo2}
                         alt="QR Code"
                         className="w-full h-full object-contain"
                       />
@@ -718,27 +894,107 @@ const ViewRequestedMember = ({ data }) => {
                 {/* CNIC Images */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                   {data?.cnicFrontPic && (
-                    <div className="w-full">
+                    <div className="w-full relative group">
                       <label className="block mb-2">CNIC Front Image</label>
                       <div className="border-2 border-dashed border-gray-400 h-48 overflow-hidden">
                         <img 
                           src={`${API_BASE_URL}/${data.cnicFrontPic}`}
                           alt="CNIC Front"
-                          className="w-full h-full object-contain cursor-pointer transition-transform duration-300 hover:scale-[2.5]"
+                          className="w-full h-full object-contain group-hover:opacity-50"
                         />
+                        {/* Enlarged image with zoom controls */}
+                        <div className="hidden group-hover:block fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+                          <div className="relative">
+                            <img 
+                              src={`${API_BASE_URL}/${data.cnicFrontPic}`}
+                              alt="CNIC Front Enlarged"
+                              className="w-[800px] h-[500px] border-4 border-white shadow-xl transition-transform duration-200 object-contain bg-white"
+                              style={{ transform: `scale(${zoomLevels.front})` }}
+                            />
+                            <div className="absolute top-2 right-2 flex gap-2">
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, front: prev.front + 0.2}));
+                                }}
+                                className="bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100"
+                              >
+                                <span className="text-xl">+</span>
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, front: Math.max(0.5, prev.front - 0.2)}));
+                                }}
+                                className="bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100"
+                              >
+                                <span className="text-xl">-</span>
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, front: 1}));
+                                }}
+                                className="bg-white rounded-full px-2 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100 text-sm"
+                              >
+                                Reset
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
                   
                   {data?.cnicBackPic && (
-                    <div className="w-full">
+                    <div className="w-full relative group">
                       <label className="block mb-2">CNIC Back Image</label>
                       <div className="border-2 border-dashed border-gray-400 h-48 overflow-hidden">
                         <img 
                           src={`${API_BASE_URL}/${data.cnicBackPic}`}
                           alt="CNIC Back"
-                          className="w-full h-full object-contain cursor-pointer transition-transform duration-300 hover:scale-[2.5]"
+                          className="w-full h-full object-contain group-hover:opacity-50"
                         />
+                        {/* Enlarged image with zoom controls */}
+                        <div className="hidden group-hover:block fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+                          <div className="relative">
+                            <img 
+                              src={`${API_BASE_URL}/${data.cnicBackPic}`}
+                              alt="CNIC Back Enlarged"
+                              className="w-[800px] h-[500px] border-4 border-white shadow-xl transition-transform duration-200 object-contain bg-white"
+                              style={{ transform: `scale(${zoomLevels.back})` }}
+                            />
+                            <div className="absolute top-2 right-2 flex gap-2">
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, back: prev.back + 0.2}));
+                                }}
+                                className="bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100"
+                              >
+                                <span className="text-xl">+</span>
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, back: Math.max(0.5, prev.back - 0.2)}));
+                                }}
+                                className="bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100"
+                              >
+                                <span className="text-xl">-</span>
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setZoomLevels(prev => ({...prev, back: 1}));
+                                }}
+                                className="bg-white rounded-full px-2 h-8 flex items-center justify-center shadow-lg hover:bg-gray-100 text-sm"
+                              >
+                                Reset
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
