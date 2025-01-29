@@ -80,6 +80,9 @@ const ViewRequestedMember = ({ data }) => {
     politicalAffiliationDescription: data?.politicalAffiliationDescription || "",
     NGO: data?.NGO || "",
     NGODescription: data?.NGODescription || "",
+    guardianName: data?.guardianName || "",
+    disability: data?.disability || "",
+    disabilityDescription: data?.disabilityDescription || "",
   });
 
   // Make all inputs readonly since this is a view-only popup
@@ -391,19 +394,23 @@ const ViewRequestedMember = ({ data }) => {
 
                 {/* Father/Husband */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <label>Father/Husband</label>
-                      <select
-                        value={formData.relation}
-                        {...makeReadOnly}
-                      >
-                        <option value="father">Father</option>
-                        <option value="husband">Husband</option>
-                      </select>
-                    </div>
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
+                    <label className="min-w-[80px]">Father/Husband</label>
+                    <select
+                      value={formData.relation}
+                      {...makeReadOnly}
+                    >
+                      <option value="father">Father</option>
+                      <option value="husband">Husband</option>
+                    </select>
+                    <input
+                      type="text"
+                      value={formData.guardianName}
+                      className="flex-1 border border-gray-400 px-2 bg-gray-50"
+                      {...makeReadOnly}
+                    />
                   </div>
-
+                  
                   {/* Father/Husband CNIC Input */}
                   <div className="flex flex-col md:flex-row md:items-center gap-2">
                     <label className="min-w-[50px]">CNIC</label>
@@ -532,6 +539,28 @@ const ViewRequestedMember = ({ data }) => {
                             disabled
                           /> Female
                         </label>
+                      </div>
+
+                      {/* Disability */}
+                      <div className="flex items-center gap-2 ml-4">
+                        <label className="text-sm">Disability</label>
+                        <select
+                          value={formData.disability}
+                          {...makeReadOnly}
+                          className="border border-gray-400 px-2 bg-gray-50"
+                        >
+                          <option value="">Select</option>
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                        {formData.disability === 'yes' && (
+                          <input
+                            type="text"
+                            value={formData.disabilityDescription}
+                            className="flex-1 border border-gray-400 px-2 bg-gray-50"
+                            {...makeReadOnly}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
