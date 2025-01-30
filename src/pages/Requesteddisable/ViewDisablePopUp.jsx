@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "../../assets/logo.png";
 import { API_BASE_URL } from "../../config/Config";
+import jsPDF from "jspdf";
+
 const ViewDisablePopUp = ({ data }) => {
 //   console.log(data);
   const dateRefs = Array(8)
@@ -153,6 +155,181 @@ const ViewDisablePopUp = ({ data }) => {
   const makeReadOnly = {
     readOnly: true,
     className: "w-full h-8 border border-gray-400 px-2 bg-gray-50"
+  };
+
+  const printDocument = async () => {
+    try {
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4"
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 40;
+      const lineHeight = 25;
+      let yPos = margin;
+
+      // Helper function to safely add text
+      const safeText = (text, x, y, options = {}) => {
+        try {
+          if (text != null && text !== undefined) {
+            pdf.text(String(text), x, y, options);
+          }
+        } catch (error) {
+          console.error(`Error adding text: ${text}`, error);
+        }
+      };
+
+      // Helper function to add field with underline
+      const addField = (label, value, x, y, width) => {
+        try {
+          const safeLabel = String(label || '');
+          const safeValue = String(value || '');
+          
+          safeText(safeLabel, x, y);
+          
+          const labelWidth = pdf.getTextWidth(safeLabel);
+          const fieldStart = x + labelWidth + 5;
+          
+          if (safeValue.trim()) {
+            safeText(safeValue, fieldStart, y);
+          }
+          
+          pdf.line(fieldStart, y + 2, x + width, y + 2);
+        } catch (error) {
+          console.error(`Error adding field ${label}:`, error);
+        }
+      };
+
+      // Add watermark
+      const watermarkSize = 400;
+      const watermarkX = (pageWidth - watermarkSize) / 2;
+      const watermarkY = (pageHeight - watermarkSize) / 2;
+      
+      pdf.saveGraphicsState();
+      pdf.setGState(new pdf.GState({ opacity: 0.1 }));
+      pdf.addImage(logo, 'PNG', watermarkX, watermarkY, watermarkSize, watermarkSize);
+      pdf.restoreGraphicsState();
+
+      // Add header background
+      pdf.setFillColor(0, 79, 37);
+      pdf.rect(margin, margin, pageWidth - (2 * margin), 100, 'F');
+
+      // Add logo
+      const logoWidth = 60;
+      const logoHeight = 60;
+      
+      try {
+        const leftLogo = new Image();
+        leftLogo.src = logo;
+        await new Promise((resolve) => {
+          leftLogo.onload = resolve;
+        });
+        pdf.addImage(leftLogo, 'PNG', margin + 10, margin + 20, logoWidth, logoHeight);
+      } catch (error) {
+        console.error("Error adding logo:", error);
+      }
+
+      // Add header text
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFont("helvetica", "bold");
+      
+      safeText("HELP SYSTEM", pageWidth/2, margin + 30, { align: "center" });
+      
+      pdf.setFontSize(16);
+      safeText("KHYBER PUKHTUNKHWA", pageWidth/2, margin + 50, { align: "center" });
+      
+      pdf.setFontSize(12);
+      safeText("Voluntary Social Welfare Organization", pageWidth/2, margin + 70, { align: "center" });
+      safeText("Health Education Livelihood & Peace for All", pageWidth/2, margin + 85, { align: "center" });
+
+      // Reset text color and move position
+      pdf.setTextColor(0, 0, 0);
+      yPos += 120;
+
+      // Add form fields
+      const fields = [
+        { label: "Serial No:", value: formData.serialNo },
+        { label: "Name:", value: formData.childName },
+        { label: "Father Name:", value: formData.fatherName },
+        { label: "CNIC:", value: formData.cnicNo },
+        { label: "Date of Birth:", value: formData.dateOfBirth },
+        { label: "Qualification:", value: formData.qulafication },
+        { label: "Type of Disability:", value: formData.typeOfDisability },
+        { label: "Name of Disability:", value: formData.nameOfDisability },
+        { label: "Cause of Disability:", value: formData.causeOfDisability },
+        { label: "Type of Job:", value: formData.TypeOfJob },
+        { label: "Source of Income:", value: formData.sourceOfIncome },
+        { label: "Applied For:", value: formData.appliedFor },
+        { label: "Phone Number:", value: formData.phoneNo },
+        { label: "Present Address:", value: formData.presentAddress },
+        { label: "Permanent Address:", value: formData.permanentAddress }
+      ];
+
+      fields.forEach(field => {
+        addField(field.label, field.value, margin, yPos, pageWidth - (2 * margin));
+        yPos += lineHeight;
+      });
+
+      // Add images if available
+      if (data?.signatureApplicant || data?.cnicFrontPic || data?.cnicBackPic) {
+        yPos += lineHeight;
+        pdf.setFont("helvetica", "bold");
+        safeText("Attached Documents", margin, yPos);
+        pdf.setFont("helvetica", "normal");
+        yPos += lineHeight;
+
+        const imageWidth = (pageWidth - (2 * margin) - 20) / 2;
+        const imageHeight = 150;
+
+        try {
+          if (data?.signatureApplicant) {
+            const img = new Image();
+            img.src = `${API_BASE_URL}/${data.signatureApplicant}`;
+            await new Promise((resolve) => {
+              img.onload = resolve;
+            });
+            safeText("Applicant Signature:", margin, yPos);
+            yPos += 20;
+            pdf.addImage(img, 'JPEG', margin, yPos, imageWidth, 100);
+            yPos += 120;
+          }
+
+          if (data?.cnicFrontPic && data?.cnicBackPic) {
+            const frontImg = new Image();
+            frontImg.src = `${API_BASE_URL}/${data.cnicFrontPic}`;
+            await new Promise((resolve) => {
+              frontImg.onload = resolve;
+            });
+            
+            const backImg = new Image();
+            backImg.src = `${API_BASE_URL}/${data.cnicBackPic}`;
+            await new Promise((resolve) => {
+              backImg.onload = resolve;
+            });
+
+            safeText("CNIC Images:", margin, yPos);
+            yPos += 20;
+            pdf.addImage(frontImg, 'JPEG', margin, yPos, imageWidth, imageHeight);
+            pdf.addImage(backImg, 'JPEG', margin + imageWidth + 20, yPos, imageWidth, imageHeight);
+          }
+        } catch (error) {
+          console.error("Error adding images:", error);
+        }
+      }
+
+      // Add footer
+      const footerY = pdf.internal.pageSize.getHeight() - margin;
+      pdf.setFontSize(10);
+      safeText("Generated on: " + new Date().toLocaleDateString(), margin, footerY);
+
+      pdf.save("disable_form_details.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Please try again.");
+    }
   };
 
   return (
@@ -623,6 +800,14 @@ const ViewDisablePopUp = ({ data }) => {
             </div>
           </form>
         </div>
+      </div>
+      <div className="flex justify-end p-4">
+        <button 
+          onClick={printDocument} 
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Print PDF
+        </button>
       </div>
     </div>
   );
