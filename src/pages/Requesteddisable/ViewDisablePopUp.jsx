@@ -63,14 +63,8 @@ const ViewDisablePopUp = ({ data }) => {
     phoneNo: data?.phoneNo || '',
     presentAddress: data?.presentAddress || '',
     permanentAddress: data?.permanentAddress || '',
-    applicantIsDeclearYesNo: data?.applicantIsDeclearYesNo || '',
-    disabilityImpairment: data?.disabilityImpairment || '',
-    fitToWork: data?.fitToWork || '',
-    typeOfAdvise: data?.typeOfAdvise || '',
-    referTo: data?.referTo || '',
-    recomendationOfBoard: data?.recomendationOfBoard || '',
-    recomendationOfBoard_1: data?.recomendationOfBoard_1 || '',
-    recomendationOfBoard_2: data?.recomendationOfBoard_2 || '',
+    serialNo: data?.serialNo || '',
+    
   });
 
   const dobRefs = Array(8).fill(0).map(() => useRef(null));
@@ -222,7 +216,7 @@ const ViewDisablePopUp = ({ data }) => {
                   {/* Green pill background */}
                   <div className="absolute inset-0 bg-[#90CE5F] rounded-full -z-10 transform scale-x-125"></div>
                   <div className="bg-[#004F25] text-white px-12 py-2 rounded-lg font-bold text-xl">
-                    Membership Form
+                    Disable Form
                   </div>
                 </div>
               </div>
@@ -230,7 +224,7 @@ const ViewDisablePopUp = ({ data }) => {
 
             {/* Membership ID */}
             <div className="text-right mt-16 mr-4 font-semibold">
-              MEMBERSHIP ID: _____________
+              Disalbe ID: {data?.serialNo}
             </div>
           </div>
 
@@ -596,131 +590,7 @@ const ViewDisablePopUp = ({ data }) => {
               </div>
             </div>
 
-            {/* Replace the Assessment Board section in your JSX with this: */}
-            <div className="mt-8 space-y-4">
-              <h3 className="text-lg font-bold">
-                RECOMMENDATION OF THE ASSESSMENT BOARD
-              </h3>
-
-              <div className="space-y-4">
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                  <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                    Is Applicant Declared
-                  </label>
-                  <select
-                    className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                    value={formData.applicantIsDeclearYesNo}
-                    disabled
-                    name="applicantIsDeclearYesNo"
-                    required
-                  >
-                    <option value="">Select Option</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                  <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                    Disability / Impairment
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                    value={formData.disabilityImpairment}
-                    disabled
-                    name="disabilityImpairment"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                    <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                      Fit to work
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                      value={formData.fitToWork}
-                      disabled
-                      name="fitToWork"
-                      required
-                    />
-                  </div>
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                    <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                      Type of Advise
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                      value={formData.typeOfAdvise}
-                      disabled
-                      name="typeOfAdvise"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                  <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                    Refer To
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                    value={formData.referTo}
-                    disabled
-                    name="referTo"
-                    required
-                  />
-                </div>
-
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                  <label className="block text-sm whitespace-nowrap min-w-[150px]">
-                    Recommendation
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                    value={formData.recomendationOfBoard}
-                    disabled
-                    name="recomendationOfBoard"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                    <label className="block text-sm whitespace-nowrap min-w-[50px]">
-                      1.
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                      value={formData.recomendationOfBoard_1}
-                      disabled
-                      name="recomendationOfBoard_1"
-                      required
-                    />
-                  </div>
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                    <label className="block text-sm whitespace-nowrap min-w-[50px]">
-                      2.
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full h-8 border border-gray-400 px-2 bg-transparent"
-                      value={formData.recomendationOfBoard_2}
-                      disabled
-                      name="recomendationOfBoard_2"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            
 
             {/* CNIC Images Upload Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
