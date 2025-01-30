@@ -4,7 +4,6 @@ import { API_BASE_URL } from "../../config/Config";
 const ViewRequestedSchool = ({ data }) => {
   // Create refs for CNIC inputs
   const fatherCnicRefs = Array(13).fill(0).map(() => useRef(null));
-  const motherCnicRefs = Array(13).fill(0).map(() => useRef(null));
   const guardianCnicRefs = Array(13).fill(0).map(() => useRef(null));
   const dobRefs = Array(8).fill(0).map(() => useRef(null));
   const admissionDateRefs = Array(8).fill(0).map(() => useRef(null));
@@ -17,18 +16,11 @@ const ViewRequestedSchool = ({ data }) => {
         if (fatherCnicRefs[index]?.current) {
           fatherCnicRefs[index].current.value = digit;
         }
-      });
+      }); 
     }
 
-    // Set mother CNIC digits
-    if (data?.motherCnic) {
-      const motherCnicDigits = data.motherCnic.replace(/-/g, '').split('');
-      motherCnicDigits.forEach((digit, index) => {
-        if (motherCnicRefs[index]?.current) {
-          motherCnicRefs[index].current.value = digit;
-        }
-      });
-    }
+
+     
 
     // Set guardian CNIC digits
     if (data?.guardianCnic) {
@@ -67,8 +59,6 @@ const ViewRequestedSchool = ({ data }) => {
     childName: data?.childName || "",
     fatherName: data?.fatherName || "",
     fatherCnic: data?.fatherCnic || "",
-    motherName: data?.motherName || "",
-    motherCnic: data?.motherCnic || "",
     dataOfBirth: data?.dataOfBirth || "",
     totalAge: data?.totalAge || "",
     bloodGroup: data?.bloodGroup || "",
@@ -85,6 +75,7 @@ const ViewRequestedSchool = ({ data }) => {
     relationWithChild: data?.relationWithChild || "",
     relationContact: data?.relationContact || "",
     guardianAddress: data?.guardianAddress || "",
+    serialNo: data?.serialNo || "",
   });
 
   // Make all inputs readonly since this is a view-only popup
@@ -112,6 +103,17 @@ const ViewRequestedSchool = ({ data }) => {
           {/* Header Banner */}
           <div className="bg-green-800 text-white px-2 py-1 mb-4">
             <h4 className="text-sm md:text-base">3. Orphans/Child Labor School Admission Form</h4>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <label className="min-w-[100px]">Serial No</label>
+            <input
+              type="text"
+              name="serialNo"
+              value={formData.serialNo}
+              disabled
+              className=" w-full md:flex-1 p-1"
+            />
           </div>
 
           <div className="space-y-4">
@@ -153,35 +155,6 @@ const ViewRequestedSchool = ({ data }) => {
                   ))}
                 </div>
               </div>
-
-              <div className="flex flex-col md:flex-row md:items-center gap-2">
-                  <label className="min-w-[100px]">Mother Name</label>
-                  <input
-                    type="text"
-                    name="motherName"
-                    value={formData.motherName}
-                    disabled
-                    className="border border-gray-400 w-full md:flex-1 p-1"
-                  />
-                </div>
-
-                <div className="flex flex-col md:flex-row md:items-center gap-2">
-                  <label className="min-w-[100px]">Mother CNIC</label>
-                  <div className="flex gap-1 overflow-x-auto pb-2 md:pb-0">
-                    {[...Array(13)].map((_, i) => (
-                      <React.Fragment key={`mother-cnic-${i}`}>
-                        <input
-                          type="number"
-                          className="w-8 h-8 border border-gray-400 text-center flex-shrink-0"
-                          maxLength="1"
-                          ref={motherCnicRefs[i]}
-                          disabled
-                        />
-                        {(i === 4 || i === 11) && <span className="flex-shrink-0">-</span>}
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </div>
 
                 <div className="flex flex-col md:flex-row md:items-center gap-2">
                   <label className="min-w-[100px]">Date of Birth</label>

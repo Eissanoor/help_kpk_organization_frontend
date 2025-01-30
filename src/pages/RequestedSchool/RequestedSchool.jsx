@@ -53,7 +53,6 @@ const RequestedSchool = () => {
           id: item._id,
           childName: item.childName,
           fatherName: item.fatherName,
-          motherName: item.motherName,
           position: item.position,
           bloodGroup: item.bloodGroup,
           fatherCnic: item.fatherCnic,
@@ -185,7 +184,6 @@ const RequestedSchool = () => {
     
     { field: 'childName', headerName: 'Child Name', width: 200 },
     { field: 'fatherName', headerName: 'Father Name', width: 200 },
-    { field: 'motherName', headerName: 'Mother Name', width: 200 },
     { field: 'position', headerName: 'Position', width: 100 },
     { field: 'bloodGroup', headerName: 'Blood Group', width: 140 },
     { field: 'fatherCnic', headerName: 'Father CNIC', width: 180 },
