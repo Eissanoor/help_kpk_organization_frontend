@@ -106,7 +106,7 @@ const ViewRequestedSchool = ({ data }) => {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center gap-2">
-            <label className="min-w-[100px]">Serial No</label>
+            <label className="min-w-[100px]">Admission No:</label>
             <input
               type="text"
               name="serialNo"
